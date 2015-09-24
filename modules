@@ -1,0 +1,4 @@
+GLUON_SITE_FEEDS='ffrn'
+
+PACKAGES_FFRN_REPO=https://github.com/Freifunk-Rhein-Neckar/ffrn-packages.git
+PACKAGES_FFRN_COMMIT=6bd0adf72728cc052736b2f261a7dfa5b6e3d632
