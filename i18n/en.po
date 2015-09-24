@@ -41,3 +41,13 @@ msgstr ""
 "3 seconds during normal operation. The device will then reboot into config "
 "mode.</p>"
 "<p>Have fun with your node and exploring the Freifunk network!</p>"
+
+msgid "gluon-luci-node-role:role:uplink"
+msgstr "With uplink"
+
+msgid "gluon-luci-node-role:role:meshonly"
+msgstr "Only Mesh"
+
+msgid "gluon-luci-node-role:role:temp"
+msgstr "Temporarily used"
+
