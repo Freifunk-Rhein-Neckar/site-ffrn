@@ -45,3 +45,13 @@ msgstr ""
 "Betrieb für drei Sekunden den Reset-Button. Das Gerät wird dann im Config "
 "Mode neustarten.</p>"
 "<p>Viel Spaß mit deinem Knoten und der Erkundung von Freifunk!</p>"
+
+msgid "gluon-luci-node-role:role:uplink"
+msgstr "Mit Uplink"
+
+msgid "gluon-luci-node-role:role:meshonly"
+msgstr "Nur Mesh"
+
+msgid "gluon-luci-node-role:role:temp"
+msgstr "Temporäre Nutzung"
+
