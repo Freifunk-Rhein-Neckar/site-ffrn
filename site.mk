@@ -11,6 +11,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-autoupdater \
 	gluon-config-mode-autoupdater \
 	gluon-config-mode-core \
+	gluon-config-mode-geo-location \
 	gluon-config-mode-hostname \
 	gluon-luci-private-wifi \
 	ffrn-gluon-config-mode-mesh-vpn \
@@ -36,7 +37,7 @@ GLUON_SITE_PACKAGES := \
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-DEFAULT_GLUON_RELEASE := 0.3+exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.3.1+exp$(shell date '+%Y%m%d')
 
 
 ##	GLUON_RELEASE
