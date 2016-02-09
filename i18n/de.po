@@ -55,3 +55,5 @@ msgstr "Nur Mesh"
 msgid "gluon-luci-node-role:role:temp"
 msgstr "Temporäre Nutzung"
 
+msgid "gluon-luci-node-role:role:offloader"
+msgstr "Offloader"
