@@ -69,3 +69,6 @@ GLUON_PRIORITY ?= 0
 
 # Languages to include
 GLUON_LANGS ?= de en
+
+# Set region for region specific firmwares
+GLUON_REGION ?= eu
