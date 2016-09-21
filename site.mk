@@ -30,6 +30,9 @@ GLUON_SITE_PACKAGES := \
 	haveged \
 	iptables \
 	iwinfo \
+	ffrn-lowmem-patches \
+	ffrn-experimental-to-stable \
+	ffrn-remove-old-vlan \
 
 ifeq ($(GLUON_TARGET),x86-generic)
 # support the usb stack on x86 devices
@@ -50,7 +53,7 @@ endif
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-DEFAULT_GLUON_RELEASE := 0.5.2-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.5.13-$(shell date '+%Y%m%d')
 
 
 ##	GLUON_RELEASE
@@ -68,3 +71,6 @@ GLUON_PRIORITY ?= 0
 
 # Languages to include
 GLUON_LANGS ?= de en
+
+# Set region for region specific firmwares
+GLUON_REGION ?= eu
