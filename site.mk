@@ -17,6 +17,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-config-mode-mesh-vpn \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
+	gluon-ebtables-segment-mld \
 	gluon-luci-admin \
 	gluon-luci-autoupdater \
 	gluon-luci-portconfig \
@@ -52,7 +53,7 @@ endif
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-DEFAULT_GLUON_RELEASE := 0.6.0-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.6.1-$(shell date '+%Y%m%d')
 
 
 ##	GLUON_RELEASE
