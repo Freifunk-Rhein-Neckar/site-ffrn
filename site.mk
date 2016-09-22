@@ -31,7 +31,6 @@ GLUON_SITE_PACKAGES := \
 	iptables \
 	iwinfo \
 	ffrn-lowmem-patches \
-	ffrn-experimental-to-stable \
 	ffrn-remove-old-vlan \
 
 ifeq ($(GLUON_TARGET),x86-generic)
@@ -53,7 +52,7 @@ endif
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-DEFAULT_GLUON_RELEASE := 0.5.13-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.6.0-$(shell date '+%Y%m%d')
 
 
 ##	GLUON_RELEASE
@@ -74,3 +73,6 @@ GLUON_LANGS ?= de en
 
 # Set region for region specific firmwares
 GLUON_REGION ?= eu
+
+GLUON_ATH10K_MESH ?= 11s
+
