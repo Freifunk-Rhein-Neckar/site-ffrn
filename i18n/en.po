@@ -43,7 +43,7 @@ msgstr ""
 "<p>Have fun with your node and exploring the Freifunk network!</p>"
 
 msgid "gluon-luci-node-role:role:uplink"
-msgstr "With uplink"
+msgstr "With uplink (default)"
 
 msgid "gluon-luci-node-role:role:meshonly"
 msgstr "Only Mesh"
