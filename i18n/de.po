@@ -47,7 +47,7 @@ msgstr ""
 "<p>Viel Spaß mit deinem Knoten und der Erkundung von Freifunk!</p>"
 
 msgid "gluon-luci-node-role:role:uplink"
-msgstr "Mit Uplink"
+msgstr "Mit Uplink (Default)"
 
 msgid "gluon-luci-node-role:role:meshonly"
 msgstr "Nur Mesh"
