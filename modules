@@ -4,5 +4,4 @@ PACKAGES_FFRN_REPO=https://github.com/Freifunk-Rhein-Neckar/ffrn-packages.git
 PACKAGES_FFRN_COMMIT=d45f18baf0df1bbfaf3f9328526d5cb5da3fc337
 
 PACKAGES_FFHO_REPO=git://github.com/FreifunkHochstift/ffho-packages.git
-PACKAGES_FFHO_COMMIT=b4924e41bb3622b57e7ab8514dacbaa1d1133c45
-PACKAGES_FFHO_BRANCH=v2016.2.x
+PACKAGES_FFHO_COMMIT=45ed1bc77e9aa612a9daafc0e070df1401babf8c
