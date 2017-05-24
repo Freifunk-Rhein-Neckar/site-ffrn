@@ -39,18 +39,18 @@ GLUON_SITE_PACKAGES := \
 #############################
 
 # USB Human Interface
-USB_PACKAGES_HID := \
+USB_PKGS_HID := \
 	kmod-usb-hid \
 	kmod-hid-generic
 
 # USB Serial
-USB_PACKAGES_SERIAL := \
+USB_PKGS_SERIAL := \
 	kmod-usb-serial \
 	kmod-usb-serial-ftdi \
 	kmod-usb-serial-pl2303
 
 # USB Storage
-USB_PACKAGES_STORAGE := \
+USB_PKGS_STORAGE := \
 	block-mount \
 	blkid \
 	kmod-fs-exfat \
@@ -73,7 +73,7 @@ USB_PACKAGES_STORAGE := \
 	swap-utils
 
 # USB Wired Ethernet Network
-USB_PACKAGES_NET := \
+USB_PKGS_NET := \
 	kmod-mii \
 	kmod-usb-net \
 	kmod-usb-net-asix \
@@ -89,7 +89,7 @@ USB_PACKAGES_NET := \
 	kmod-usb-net-smsc95xx
 
 # PCI-Express Network
-PCIE_PACKAGES_NET := \
+PCIE_PKGS_NET := \
 	kmod-bnx2
 
 
@@ -104,9 +104,9 @@ USB_PKGS := \
 	$(USB_PACKAGES_HID) \
 	$(USB_FULL_WITHOUT_HID)
 
-PCI_PKSG := \
+PCIE_PKGS := \
 	pciutils \
-	$(PCIE_PACKAGES_NET)
+	$(PCIE_PKGS_NET)
 
 
 ##################################
