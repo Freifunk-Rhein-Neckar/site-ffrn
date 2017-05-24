@@ -96,13 +96,13 @@ PCIE_PKGS_NET := \
 # Group previous package sets
 USB_PKGS_WITHOUT_HID := \
 	usbutils \
-	$(USB_PACKAGES_SERIAL) \
-	$(USB_PACKAGES_STORAGE) \
-	$(USB_PACKAGES_NET)
+	$(USB_PKGS_SERIAL) \
+	$(USB_PKGS_STORAGE) \
+	$(USB_PKGS_NET)
 
 USB_PKGS := \
-	$(USB_PACKAGES_HID) \
-	$(USB_FULL_WITHOUT_HID)
+	$(USB_PKGS_HID) \
+	$(USB_PKGS_WITHOUT_HID)
 
 PCIE_PKGS := \
 	pciutils \
