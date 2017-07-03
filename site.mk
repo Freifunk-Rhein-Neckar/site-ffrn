@@ -14,6 +14,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-config-mode-geo-location \
 	gluon-config-mode-hostname \
 	gluon-config-mode-mesh-vpn \
+	gluon-ebtables-source-filter \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
 	gluon-ebtables-segment-mld \
@@ -31,7 +32,6 @@ GLUON_SITE_PACKAGES := \
 	iptables \
 	iwinfo \
 	ffrn-lowmem-patches \
-	ffho-ebtables-net-rules \
 	ffho-ath9k-blackout-workaround
 
 ############################
@@ -165,7 +165,7 @@ endif
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-DEFAULT_GLUON_RELEASE := 0.7.1-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 1.0.2-$(shell date '+%Y%m%d')
 
 
 ##	GLUON_RELEASE
