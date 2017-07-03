@@ -32,7 +32,7 @@ msgstr ""
 "VPN Key: <%= pubkey %>"
 "<br/>"
 "MAC: <%= sysconfig.primary_mac %>"
-"<hr>"
+"<hr></p>"
 
 msgid "gluon-config-mode:reboot"
 msgstr ""
