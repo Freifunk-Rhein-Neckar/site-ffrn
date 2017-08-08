@@ -33,6 +33,13 @@ msgstr ""
 "MAC: <%= sysconfig.primary_mac %>"
 "<hr /></p>"
 
+msgid "gluon-config-mode:novpn"
+msgstr ""
+"<p><div class=\"the-key\">You have chosen <strong>not to use</strong> your "
+"internet connection to setup a VPN-connection to the local Freifunk "
+"backbone. Your node will only be able to participate in the network when "
+"other Freifunk nodes are in range to mesh with it.</div></p>"
+
 msgid "gluon-config-mode:reboot"
 msgstr ""
 "<p>The node is currently rebooting and will try to connect to other "
