@@ -46,14 +46,14 @@ msgstr ""
 "Mode neustarten.</p>"
 "<p>Viel Spaß mit deinem Knoten und der Erkundung von Freifunk!</p>"
 
-msgid "gluon-luci-node-role:role:uplink"
+msgid "gluon-web-node-role:role:uplink"
 msgstr "Mit Uplink"
 
-msgid "gluon-luci-node-role:role:meshonly"
+msgid "gluon-web-node-role:role:meshonly"
 msgstr "Nur Mesh"
 
-msgid "gluon-luci-node-role:role:temp"
+msgid "gluon-web-node-role:role:temp"
 msgstr "Temporäre Nutzung"
 
-msgid "gluon-luci-node-role:role:offloader"
+msgid "gluon-web-node-role:role:offloader"
 msgstr "Offloader"
