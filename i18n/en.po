@@ -44,14 +44,14 @@ msgstr ""
 "mode.</p>"
 "<p>Have fun with your node and exploring the Freifunk network!</p>"
 
-msgid "gluon-luci-node-role:role:uplink"
+msgid "gluon-web-node-role:role:uplink"
 msgstr "With uplink"
 
-msgid "gluon-luci-node-role:role:meshonly"
+msgid "gluon-web-node-role:role:meshonly"
 msgstr "Only Mesh"
 
-msgid "gluon-luci-node-role:role:temp"
+msgid "gluon-web-node-role:role:temp"
 msgstr "Temporarily used"
 
-msgid "gluon-luci-node-role:role:offloader"
+msgid "gluon-web-node-role:role:offloader"
 msgstr "Offloader"
