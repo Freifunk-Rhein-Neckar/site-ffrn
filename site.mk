@@ -165,7 +165,7 @@ endif
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-DEFAULT_GLUON_RELEASE := 1.1.2-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := $(shell date '+%Y%m%d')-$(shell git rev-parse HEAD | cut -c 1-7)
 
 
 ##	GLUON_RELEASE
