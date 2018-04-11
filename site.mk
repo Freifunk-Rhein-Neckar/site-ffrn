@@ -317,7 +317,7 @@ endif
 #		to decide if a version is newer or not.
 
 #DEFAULT_GLUON_RELEASE := 1.1.3-$(shell date '+%Y%m%d')
-DEFAULT_GLUON_RELEASE := 1.1.4-20180219
+DEFAULT_GLUON_RELEASE := 1.1.5-20180411
 
 
 ##	GLUON_RELEASE
