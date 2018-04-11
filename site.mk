@@ -1,9 +1,40 @@
-##	gluon site.mk makefile example
+##	Freifunk Rhein-Neckar Gluon site.mk makefile
+
+
+##	DEFAULT_GLUON_RELEASE
+#		version string to use for images
+#		gluon relies on
+#			opkg compare-versions "$1" '>>' "$2"
+#		to decide if a version is newer or not.
+
+#DEFAULT_GLUON_RELEASE := 1.1.3-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 1.1.5-20180411
+
+
+##	GLUON_RELEASE
+#		call make with custom GLUON_RELEASE flag, to use your own release version scheme.
+#		e.g.:
+#			$ make images GLUON_RELEASE=23.42+5
+#		would generate images named like this:
+#			gluon-ff%site_code%-23.42+5-%router_model%.bin
+
+# Allow overriding the release number from the command line
+GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
+
+# Default priority for updates.
+GLUON_PRIORITY := 0
+
+# Languages to include
+GLUON_LANGS ?= de en
+
+# Set region for region specific firmwares
+GLUON_REGION ?= eu
+
+GLUON_ATH10K_MESH ?= 11s
 
 ##	GLUON_SITE_PACKAGES
 #		specify gluon/openwrt packages to include here
 #		The gluon-mesh-batman-adv-* package must come first because of the dependency resolution
-
 GLUON_SITE_PACKAGES := \
 	gluon-mesh-batman-adv-15 \
 	gluon-alfred \
@@ -18,6 +49,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
 	gluon-ebtables-segment-mld \
+	gluon-ebtables-limit-arp \
 	gluon-web-admin \
 	gluon-web-autoupdater \
 	gluon-web-network \
@@ -30,7 +62,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-status-page \
 	haveged \
 	iptables \
-	iwinfo 
+	iwinfo
 	#ffrn-lowmem-patches \
 	#ffho-ath9k-blackout-workaround
 
@@ -309,34 +341,3 @@ endif
 ifeq ($(GLUON_TARGET),sunxi)
 	GLUON_SITE_PACKAGES += $(USB_PKGS)
 endif
-
-##	DEFAULT_GLUON_RELEASE
-#		version string to use for images
-#		gluon relies on
-#			opkg compare-versions "$1" '>>' "$2"
-#		to decide if a version is newer or not.
-
-#DEFAULT_GLUON_RELEASE := 1.1.3-$(shell date '+%Y%m%d')
-DEFAULT_GLUON_RELEASE := 1.1.5-20180411
-
-
-##	GLUON_RELEASE
-#		call make with custom GLUON_RELEASE flag, to use your own release version scheme.
-#		e.g.:
-#			$ make images GLUON_RELEASE=23.42+5
-#		would generate images named like this:
-#			gluon-ff%site_code%-23.42+5-%router_model%.bin
-
-# Allow overriding the release number from the command line
-GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
-
-# Default priority for updates.
-GLUON_PRIORITY := 0
-
-# Languages to include
-GLUON_LANGS ?= de en
-
-# Set region for region specific firmwares
-GLUON_REGION ?= eu
-
-GLUON_ATH10K_MESH ?= 11s
