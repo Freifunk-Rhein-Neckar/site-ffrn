@@ -8,7 +8,7 @@
 #		to decide if a version is newer or not.
 
 #DEFAULT_GLUON_RELEASE := 1.1.3-$(shell date '+%Y%m%d')
-DEFAULT_GLUON_RELEASE := 1.1.5-20180411
+DEFAULT_GLUON_RELEASE := 1.1.5-20180416
 
 
 ##	GLUON_RELEASE
@@ -49,6 +49,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
 	gluon-ebtables-segment-mld \
+	gluon-ebtables-limit-arp \
 	gluon-web-admin \
 	gluon-web-autoupdater \
 	gluon-web-network \
