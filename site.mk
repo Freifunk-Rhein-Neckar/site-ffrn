@@ -8,7 +8,7 @@
 #		to decide if a version is newer or not.
 
 #DEFAULT_GLUON_RELEASE := 1.1.3-$(shell date '+%Y%m%d')
-DEFAULT_GLUON_RELEASE := 1.1.5-20180411
+DEFAULT_GLUON_RELEASE := 1.1.x-$(shell date '+%Y%m%d')
 
 
 ##	GLUON_RELEASE
@@ -61,7 +61,9 @@ GLUON_SITE_PACKAGES := \
 	gluon-status-page \
 	haveged \
 	iptables \
-	iwinfo
+	iwinfo \
+	gluon-ebtables-limit-arp \
+	ffda-update-stabilizer
 	#ffrn-lowmem-patches \
 	#ffho-ath9k-blackout-workaround
 
