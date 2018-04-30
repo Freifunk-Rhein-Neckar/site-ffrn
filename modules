@@ -1,7 +1,7 @@
 GLUON_SITE_FEEDS='ffrn ffho'
 
 PACKAGES_FFRN_REPO=https://github.com/Freifunk-Rhein-Neckar/ffrn-packages.git
-PACKAGES_FFRN_COMMIT=0cb1c3b9585f39f7d59d0e1f03f18846c7b9c187
+PACKAGES_FFRN_COMMIT=135dd26391a9196ba0a317dbd4501addd877fbf2
 
 PACKAGES_FFHO_REPO=git://github.com/FreifunkHochstift/ffho-packages.git
 PACKAGES_FFHO_COMMIT=468c37910321a6f9f1d3c74110b70341a82108d2
