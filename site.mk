@@ -8,7 +8,7 @@
 #		to decide if a version is newer or not.
 
 #DEFAULT_GLUON_RELEASE := 1.1.3-$(shell date '+%Y%m%d')
-DEFAULT_GLUON_RELEASE := 1.2.x-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 1.2.x-multidomain-$(shell date '+%Y%m%d')
 
 
 ##	GLUON_RELEASE
@@ -30,7 +30,10 @@ GLUON_LANGS ?= de en
 # Set region for region specific firmwares
 GLUON_REGION ?= eu
 
-GLUON_ATH10K_MESH ?= 11s
+GLUON_WLAN_MESH ?= 11s
+
+# enable multidomain support
+GLUN_MULTIDOMAIN=1
 
 # Featureset, these are either virtual or packages prefixed with "gluon-"
 GLUON_FEATURES := \
