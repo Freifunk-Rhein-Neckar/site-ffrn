@@ -33,7 +33,7 @@ GLUON_REGION ?= eu
 GLUON_WLAN_MESH ?= 11s
 
 # enable multidomain support
-GLUN_MULTIDOMAIN=1
+GLUON_MULTIDOMAIN=1
 
 # Featureset, these are either virtual or packages prefixed with "gluon-"
 GLUON_FEATURES := \
