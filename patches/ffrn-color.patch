@@ -1,0 +1,22 @@
+--- package/gluon-config-mode-theme/sass/gluon.scss     2019-11-25 22:38:49.878882614 +0100
++++ package/gluon-config-mode-theme/sass/gluon.scss     2019-12-03 17:15:01.835031047 +0100
+@@ -13,7 +13,7 @@
+ @charset "utf-8";
+ 
+ $ffyellow:  #ffb400;
+-$ffmagenta: #dc0067;
++$ffmagenta: #52995d;
+ $ffzusatz:  #009ee0;
+ $red:       #ee3300;
+ 
+--- package/gluon-status-page/sass/status-page.scss     2019-11-25 22:38:49.898882832 +0100
++++ package/gluon-status-page/sass/status-page.scss     2019-12-03 17:15:36.511411725 +0100
+@@ -68,7 +68,7 @@
+ header {
+        display: flex;
+        padding: 0 14px;
+-       background: #dc0067;
++       background: #52995d;
+        color: rgba(255, 255, 255, 0.98);
+        position: absolute;
+        top: 0;
