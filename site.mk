@@ -51,7 +51,8 @@ GLUON_FEATURES := \
 	web-advanced \
 	web-logging \
 	web-private-wifi \
-	web-wizard
+	web-wizard \
+	config-mode-geo-location-osm
 
 
 ##	GLUON_SITE_PACKAGES
