@@ -8,20 +8,10 @@
 #		to decide if a version is newer or not.
 
 DEFAULT_GLUON_RELEASE := 1.4.x-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_PRIORITY := 0
 
-
-##	GLUON_RELEASE
-#		call make with custom GLUON_RELEASE flag, to use your own release version scheme.
-#		e.g.:
-#			$ make images GLUON_RELEASE=23.42+5
-#		would generate images named like this:
-#			gluon-ff%site_code%-23.42+5-%router_model%.bin
-
-# Allow overriding the release number from the command line
-GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
-
-# Default priority for updates.
-GLUON_PRIORITY := 0
+# multidomain support
+GLUON_MULTIDOMAIN := 0
 
 # Languages to include
 GLUON_LANGS ?= de en
@@ -29,14 +19,22 @@ GLUON_LANGS ?= de en
 # Set region for region specific firmwares
 GLUON_REGION ?= eu
 
-GLUON_ATH10K_MESH ?= 11s
+# Allow overriding the release number from the command line
+GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
+GLUON_PRIORITY ?= ${DEFAULT_GLUON_PRIORITY}
 
-# whether images for deprecated devices should be built
+# Don't build factory firmware for deprecated devices
 GLUON_DEPRECATED ?= upgrade
+
+# Prefer ath10k firmware with 802.11s support
+GLUON_WLAN_MESH ?= 11s
+
 
 # Featureset, these are either virtual or packages prefixed with "gluon-"
 GLUON_FEATURES := \
 	autoupdater \
+	config-mode-geo-location-osm \
+	config-mode-outdoor \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
 	ebtables-limit-arp \
@@ -49,8 +47,7 @@ GLUON_FEATURES := \
 	web-advanced \
 	web-logging \
 	web-private-wifi \
-	web-wizard \
-	config-mode-geo-location-osm
+	web-wizard
 
 
 ##	GLUON_SITE_PACKAGES
@@ -59,7 +56,7 @@ GLUON_FEATURES := \
 GLUON_SITE_PACKAGES := \
 	haveged \
 	iwinfo \
-        respondd-module-airtime
+	respondd-module-airtime
 
 ############################
 # Additional package sets
