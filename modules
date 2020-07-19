@@ -1,1 +1,4 @@
-GLUON_SITE_FEEDS=''
+GLUON_SITE_FEEDS='community'
+
+PACKAGES_COMMUNITY_REPO=https://github.com/freifunk-gluon/community-packages.git
+PACKAGES_COMMUNITY_COMMIT=389349794970be57636ec3770450d653ffb04727
