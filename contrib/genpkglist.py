@@ -251,7 +251,8 @@ targets.get('ath79-generic'). \
         'devolo-wifi-pro-1750i',
         'devolo-wifi-pro-1750x',
         'ocedo-raccoon',
-        'tp-link-archer-c6-v2',], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
+        'tp-link-archer-c6-v2',
+        'tp-link-cpe220-v3',], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
 
 for target in ['ar71xx-nand', 'ipq40xx-generic', 'ipq806x-generic', 'lantiq-xway', 'lantiq-xrx200', 'mpc85xx-generic', 'mpc85xx-p1020', 'mvebu-cortexa9', 'ramips-mt7620', 'sunxi-cortexa7']:
     targets.get(target). \
@@ -290,8 +291,10 @@ targets.get('ramips-mt76x8'). \
     add_pkglist(PKGS_USB_STORAGE). \
     add_pkglist(PKGS_TLS). \
     exclude([   # devices without usb ports
+        'cudy-wr1000',
         'gl.inet-vixmini',
         'tp-link-archer-c50-v3',
+        'tp-link-archer-c50-v4',
         'tp-link-tl-wa801nd-v5',
         'tp-link-tl-wr841n-v13'], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
 
