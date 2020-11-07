@@ -11,7 +11,7 @@ DEFAULT_GLUON_RELEASE := 2.0.x-$(shell date '+%Y%m%d')
 DEFAULT_GLUON_PRIORITY := 0
 
 # multidomain support
-GLUON_MULTIDOMAIN := 0
+GLUON_MULTIDOMAIN := 1
 
 # Languages to include
 GLUON_LANGS ?= de en
@@ -29,6 +29,7 @@ GLUON_DEPRECATED ?= upgrade
 # Featureset, these are either virtual or packages prefixed with "gluon-"
 GLUON_FEATURES := \
 	autoupdater \
+	config-mode-domain-select \
 	config-mode-geo-location-osm \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
