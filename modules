@@ -1,4 +1,7 @@
-GLUON_SITE_FEEDS='community'
+GLUON_SITE_FEEDS='ffrn community'
+
+PACKAGES_FFRN_REPO=https://github.com/Freifunk-Rhein-Neckar/ffrn-packages.git
+PACKAGES_FFRN_COMMIT=e4c1738ad6e99491596d206f18d828ec7286b729
 
 PACKAGES_COMMUNITY_REPO=https://github.com/freifunk-gluon/community-packages.git
 PACKAGES_COMMUNITY_COMMIT=1d7e81b3ebda8fa4896d55c79dff7051e8c0dde4
