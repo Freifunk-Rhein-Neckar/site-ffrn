@@ -18,7 +18,6 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 
 ## Branches
 
-
 * `master`:
     * matches Gluons `master` branch
 * `multidomain`:
@@ -40,6 +39,7 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 
 | Release  | Gluon Commit |
 | -------- | --------     |
+| 1.6.1 | [v2021.1.1](https://github.com/freifunk-gluon/gluon/commit/0d2f834d317eb49fe2bd0e6ddbba62f5a031fd2b) |
 | 1.6.0 | [v2021.1](https://github.com/freifunk-gluon/gluon/commit/0f9a6334a04da2e3916b1e1ba037f49647fb0064) |
 | 1.5.2 | [v2020.2.2](https://github.com/freifunk-gluon/gluon/commit/90d0e33c619cef9e0af928ef4d6477f6c1bdc0de) |
 | 1.5.1 | [v2020.2.1](https://github.com/freifunk-gluon/gluon/commit/8547bd43406a64cc652d6d8a778064f4b9b4cdfe) |
