@@ -35,7 +35,7 @@ GLUON_FEATURES := \
 	ebtables-limit-arp \
 	ebtables-source-filter \
 	mesh-batman-adv-15 \
-	mesh-vpn-fastd \
+	mesh-vpn-fastd-l2tp \
 	radvd \
 	radv-filterd \
 	respondd \
