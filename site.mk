@@ -180,6 +180,12 @@ EXCLUDE_TLS := \
     -ca-bundle \
     -libustream-openssl
 
+INCLUDE_EOL := \
+    ffrn-change-autoupdater-branch-eoldevices
+
+EXCLUDE_EOL := \
+    -ffrn-change-autoupdater-branch-eoldevices
+
 ifeq ($(GLUON_TARGET),ar71xx-generic)
     GLUON_SITE_PACKAGES += $(INCLUDE_TLS) $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
 
@@ -244,8 +250,10 @@ ifeq ($(GLUON_TARGET),ar71xx-nand)
 
 endif
 
-# no pkglists for target ar71xx-tiny
+ifeq ($(GLUON_TARGET),ar71xx-tiny)
+    GLUON_SITE_PACKAGES += $(INCLUDE_EOL)
 
+endif
 
 ifeq ($(GLUON_TARGET),ath79-generic)
     GLUON_SITE_PACKAGES += $(INCLUDE_TLS) $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
@@ -334,8 +342,10 @@ ifeq ($(GLUON_TARGET),ramips-mt76x8)
     GLUON_tp-link-tl-wr841n-v13_SITE_PACKAGES += $(EXCLUDE_USB) $(EXCLUDE_USB_NET) $(EXCLUDE_USB_SERIAL) $(EXCLUDE_USB_STORAGE)
 endif
 
-# no pkglists for target ramips-rt305x
+ifeq ($(GLUON_TARGET),ramips-rt305x)
+    GLUON_SITE_PACKAGES += $(INCLUDE_EOL)
 
+endif
 
 ifeq ($(GLUON_TARGET),sunxi-cortexa7)
     GLUON_SITE_PACKAGES += $(INCLUDE_TLS) $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
