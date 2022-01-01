@@ -174,9 +174,18 @@ PKGS_TLS = PackageList('TLS', [
 ])
 pkglists.append(PKGS_TLS)
 
+PKGS_EOL = PackageList('EOL', [
+    'ffrn-change-autoupdater-branch-eoldevices'
+])
+pkglists.append(PKGS_EOL)
+
 #
 # package assignment
 #
+
+for target in ['ar71xx-tiny', 'ramips-rt305x']:
+    targets.get(target). \
+        add_pkglist(PKGS_EOL)
 
 targets.get('ar71xx-generic'). \
     add_pkglist(PKGS_USB). \
