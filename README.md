@@ -21,7 +21,7 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 * `main`:
     * matches Gluons `master` branch
     * published as nightly
-    * firmware version: 1.6.x-yyyymmdd
+    * firmware version: 1.9.x-yyyymmdd
 * `v2021.1.x`:
     * matches Gluon `v2021.1.x` branch
     * firmware version: v1.6.x

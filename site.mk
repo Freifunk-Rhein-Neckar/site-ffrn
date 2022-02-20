@@ -7,7 +7,7 @@
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-DEFAULT_GLUON_RELEASE := 1.6.x-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 1.9.x-$(shell date '+%Y%m%d')
 DEFAULT_GLUON_PRIORITY := 0
 
 # multidomain support
