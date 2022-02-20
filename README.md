@@ -18,11 +18,9 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 
 ## Branches
 
-* `master`:
+* `main`:
     * matches Gluons `master` branch
-* `multidomain`:
-    * matches our `master` but with additional multidomain support
-    * currently published as nightly
+    * published as nightly
     * firmware version: 1.6.x-yyyymmdd
 * `v2021.1.x`:
     * matches Gluon `v2021.1.x` branch
