@@ -53,9 +53,6 @@ GLUON_SITE_PACKAGES := \
 	iwinfo \
 	respondd-module-airtime
 
-GLUON_SITE_PACKAGES_standard := \
-	ffda-usb-wan-hotplug
-
 GLUON_FEATURES_standard := wireless-encryption-wpa3
 
 
