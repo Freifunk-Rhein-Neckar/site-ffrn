@@ -224,6 +224,7 @@ targets.get('ath79-generic'). \
         'siemens-ws-ap3610',
         'tp-link-archer-c2-v3',
         'tp-link-archer-c6-v2',
+        'tp-link-archer-c25-v1',
         'tp-link-cpe210-v1',
         'tp-link-cpe210-v2',
         'tp-link-cpe220-v3',
