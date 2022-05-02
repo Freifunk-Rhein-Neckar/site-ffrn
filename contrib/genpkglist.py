@@ -243,7 +243,17 @@ targets.get('ath79-generic'). \
         'ubiquiti-unifi-ap-pro'
     ], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
 
-for target in ['ipq40xx-generic', 'ipq806x-generic', 'lantiq-xway', 'lantiq-xrx200', 'mpc85xx-p1010', 'mpc85xx-p1020', 'mvebu-cortexa9', 'ramips-mt7620', 'rockchip-armv8', 'sunxi-cortexa7']:
+targets.get('lantiq-xrx200'). \
+    add_pkglist(PKGS_USB). \
+    add_pkglist(PKGS_USB_NET). \
+    add_pkglist(PKGS_USB_SERIAL). \
+    add_pkglist(PKGS_USB_STORAGE). \
+    add_pkglist(PKGS_TLS). \
+    exclude([  # devices without usb ports
+        'tp-link-td-w8970',
+    ], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
+
+for target in ['ipq40xx-generic', 'ipq806x-generic', 'lantiq-xway', 'mpc85xx-p1010', 'mpc85xx-p1020', 'mvebu-cortexa9', 'ramips-mt7620', 'rockchip-armv8', 'sunxi-cortexa7']:
     targets.get(target). \
         add_pkglist(PKGS_USB). \
         add_pkglist(PKGS_USB_NET). \
