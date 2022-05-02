@@ -207,67 +207,21 @@ pkglists.append(PKGS_TLS)
 #
 
 targets.get('ath79-generic'). \
-    add_pkglist(PKGS_USB). \
-    add_pkglist(PKGS_USB_NET). \
-    add_pkglist(PKGS_USB_SERIAL). \
-    add_pkglist(PKGS_USB_STORAGE). \
-    add_pkglist(PKGS_TLS). \
-    exclude([  # devices without usb ports
-        'avm-fritz-wlan-repeater-450e',
-        'd-link-dap-1330-a1',
-        'd-link-dap-1365-a1',
-        'd-link-dap-2660-a1',
-        'devolo-wifi-pro-1200e',
-        'devolo-wifi-pro-1200i',
-        'devolo-wifi-pro-1750c',
+    include([ # 7M usable firmware space + USB port
         'devolo-wifi-pro-1750e',
-        'devolo-wifi-pro-1750i',
-        'devolo-wifi-pro-1750x',
-        'enterasys-ws-ap3705',
+        'gl.inet-gl-ar150',
+        'gl.inet-gl-ar300m-lite',
+        'gl.inet-gl-ar750',
         'joy-it-jt-or750i',
-        'ocedo-raccoon',
-        'openmesh-a40',
-        'openmesh-a60',
-        'openmesh-mr1750-v1',
-        'openmesh-mr1750-v2',
-        'openmesh-mr600-v1',
-        'openmesh-mr600-v2',
-        'openmesh-mr900-v1',
-        'openmesh-mr900-v2',
-        'openmesh-om2p-hs-v1',
-        'openmesh-om2p-hs-v2',
-        'openmesh-om2p-hs-v3',
-        'openmesh-om2p-hs-v4',
-        'openmesh-om2p-lc',
-        'openmesh-om2p-v1',
-        'openmesh-om2p-v2',
-        'openmesh-om2p-v4',
-        'openmesh-om5p',
-        'openmesh-om5p-ac-v1',
-        'openmesh-om5p-ac-v2',
-        'openmesh-om5p-an',
-        'plasma-cloud-pa300',
-        'plasma-cloud-pa300e',
-        'siemens-ws-ap3610',
-        'tp-link-archer-c2-v3',
-        'tp-link-archer-c6-v2',
-        'tp-link-archer-c25-v1',
-        'tp-link-cpe210-v1',
-        'tp-link-cpe210-v2',
-        'tp-link-cpe220-v3',
-        'tp-link-cpe510-v1',
-        'tp-link-cpe510-v2',
-        'tp-link-cpe510-v3',
-        'tp-link-eap225-outdoor-v1',
-        'tp-link-tl-wr810n-v1',
-        'tp-link-wbs210-v1',
-        'tp-link-wbs210-v2',
-        'ubiquiti-nanostation-m-xw',
-        'ubiquiti-unifi-ac-lite',
-        'ubiquiti-unifi-ac-lr',
-        'ubiquiti-unifi-ac-mesh',
-        'ubiquiti-unifi-ap',
-        'ubiquiti-unifi-ap-pro'
+        'netgear-wndr3700-v2',
+        'tp-link-archer-a7-v5',
+        'tp-link-archer-c5-v1',
+        'tp-link-archer-c7-v2',
+        'tp-link-archer-c7-v5',
+        'tp-link-archer-c59-v1',
+        'tp-link-tl-wr842n-v3',
+        'tp-link-tl-wr1043nd-v4',
+        'tp-link-tl-wr1043n-v5'
     ], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
 
 for target in ['ipq40xx-generic', 'ipq806x-generic', 'lantiq-xway', 'lantiq-xrx200', 'mpc85xx-p1010', 'mpc85xx-p1020', 'mvebu-cortexa9', 'ramips-mt7620', 'rockchip-armv8', 'sunxi-cortexa7']:
