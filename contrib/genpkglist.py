@@ -7,6 +7,7 @@ from jinja2 import Template
 # path to your gluon checkout, will be used to find targets and devices
 GLUON_DIR = '/home/tom/git/Freifunk-Rhein-Neckar/firmware/gluon/'
 
+
 class PackageList:
     def __init__(self, name: str, pkgs: list):
         self.name = name
@@ -222,6 +223,16 @@ targets.get('ath79-generic'). \
         'tp-link-tl-wr842n-v3',
         'tp-link-tl-wr1043nd-v4',
         'tp-link-tl-wr1043n-v5',
+    ], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
+
+targets.get('lantiq-xrx200'). \
+    add_pkglist(PKGS_USB). \
+    add_pkglist(PKGS_USB_NET). \
+    add_pkglist(PKGS_USB_SERIAL). \
+    add_pkglist(PKGS_USB_STORAGE). \
+    add_pkglist(PKGS_TLS). \
+    exclude([ # devices without usb ports
+        'avm-fritz-box-7412',
     ], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
 
 for target in ['ipq40xx-generic', 'ipq806x-generic', 'lantiq-xway', 'lantiq-xrx200', 'mpc85xx-p1010', 'mpc85xx-p1020', 'mvebu-cortexa9', 'rockchip-armv8', 'sunxi-cortexa7']:
