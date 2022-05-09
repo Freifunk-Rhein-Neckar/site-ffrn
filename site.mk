@@ -55,6 +55,9 @@ GLUON_SITE_PACKAGES := \
 	libustream-wolfssl \
 	respondd-module-airtime
 
+GLUON_SITE_PACKAGES_standard := \
+	ffda-gluon-usteer
+
 GLUON_FEATURES_standard := \
 	wireless-encryption-wpa3
 
