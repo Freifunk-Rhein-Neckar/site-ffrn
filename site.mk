@@ -50,7 +50,9 @@ GLUON_FEATURES := \
 #		specify gluon/openwrt packages to include here
 #		The gluon-mesh-batman-adv-* package must come first because of the dependency resolution
 GLUON_SITE_PACKAGES := \
+	ca-bundle \
 	iwinfo \
+	libustream-wolfssl \
 	respondd-module-airtime
 
 GLUON_FEATURES_standard := \
