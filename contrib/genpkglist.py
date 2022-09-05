@@ -249,7 +249,7 @@ targets.get('mediatek-mt7622'). \
     add_pkglist(PKGS_USB_SERIAL). \
     add_pkglist(PKGS_USB_STORAGE). \
     exclude([  # devices without usb ports
-        'ubiquiti-unifi-6-lr'], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
+        'ubiquiti-unifi-6-lr-v1'], pkglists=[PKGS_USB, PKGS_USB_NET, PKGS_USB_SERIAL, PKGS_USB_STORAGE])
 
 targets.get('ramips-mt7621'). \
     add_pkglist(PKGS_USB). \

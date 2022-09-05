@@ -193,6 +193,9 @@ ifeq ($(GLUON_TARGET),ath79-generic)
     GLUON_tp-link-tl-wr1043n-v5_SITE_PACKAGES += $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
 endif
 
+# no pkglists for target ath79-mikrotik
+
+
 # no pkglists for target ath79-nand
 
 
@@ -216,6 +219,9 @@ ifeq ($(GLUON_TARGET),ipq40xx-generic)
 
 endif
 
+# no pkglists for target ipq40xx-mikrotik
+
+
 ifeq ($(GLUON_TARGET),ipq806x-generic)
     GLUON_SITE_PACKAGES += $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
 
@@ -235,7 +241,7 @@ endif
 ifeq ($(GLUON_TARGET),mediatek-mt7622)
     GLUON_SITE_PACKAGES += $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
 
-    GLUON_ubiquiti-unifi-6-lr_SITE_PACKAGES += $(EXCLUDE_USB) $(EXCLUDE_USB_NET) $(EXCLUDE_USB_SERIAL) $(EXCLUDE_USB_STORAGE)
+    GLUON_ubiquiti-unifi-6-lr-v1_SITE_PACKAGES += $(EXCLUDE_USB) $(EXCLUDE_USB_NET) $(EXCLUDE_USB_SERIAL) $(EXCLUDE_USB_STORAGE)
 endif
 
 ifeq ($(GLUON_TARGET),mpc85xx-p1010)
