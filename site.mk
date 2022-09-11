@@ -50,6 +50,7 @@ GLUON_FEATURES := \
 #		specify gluon/openwrt packages to include here
 #		The gluon-mesh-batman-adv-* package must come first because of the dependency resolution
 GLUON_SITE_PACKAGES := \
+	ffrn-change-autoupdater-branch-nightly \
 	ca-bundle \
 	iwinfo \
 	libustream-wolfssl \
