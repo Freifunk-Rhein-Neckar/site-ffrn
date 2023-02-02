@@ -40,6 +40,7 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 
 | Release  | Gluon Commit |
 | -------- | --------     |
+| 2.0.4 | [v2022.1.2](https://github.com/freifunk-gluon/gluon/commit/2751daa655c8adae66ffd2c004a4fca060ae1d43) |
 | 2.0.3 | [v2022.1.1](https://github.com/freifunk-gluon/gluon/commit/ab1fb054f6be33fdba74c3f3344d9ef746287c68) |
 | 2.0.2 | [v2022.1](https://github.com/freifunk-gluon/gluon/commit/183f34597903d94e9d4cd642bdc87f0adb808816) |
 | 2.0.1 | [v2022.1](https://github.com/freifunk-gluon/gluon/commit/ecd9f8cfe8cc11d7b52a34858506093bc770e9e6) |
