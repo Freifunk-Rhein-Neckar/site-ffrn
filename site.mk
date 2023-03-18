@@ -59,6 +59,7 @@ GLUON_SITE_PACKAGES_standard := \
 	ffda-gluon-usteer
 
 GLUON_FEATURES_standard := \
+	web-cellular \
 	wireless-encryption-wpa3
 
 
