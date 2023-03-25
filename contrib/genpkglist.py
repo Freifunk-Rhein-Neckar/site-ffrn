@@ -4,8 +4,8 @@ from collections import defaultdict
 
 from jinja2 import Template
 
-# This script is from the ffda Site
-# yout can find the original at their repo:
+# This script is from the ffda site.
+# You can find the original at their repo:
 # https://git.darmstadt.ccc.de/ffda/firmware/site/-/blob/master/contrib/genpkglist.py
 
 
