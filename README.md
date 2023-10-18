@@ -21,7 +21,10 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 * `main`:
     * matches Gluons `master` branch
     * published as nightly
-    * firmware version: 2.0.x-yyyymmdd
+    * firmware version: 2.1.x-yyyymmdd
+* `v2023.1.x`:
+    * matches Gluon `v2023.1.x` branch
+    * firmware version: v2.1.x
 * `v2022.1.x`:
     * matches Gluon `v2022.1.x` branch
     * firmware version: v2.0.x
@@ -40,6 +43,7 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 
 | Release  | Gluon Commit |
 | -------- | --------     |
+| 2.1.0 | [v2023.1.1-2-g19ab54ff](https://github.com/Freifunk-Rhein-Neckar/gluon/commit/19ab54ffa935c95eadd4b55d832ba77de9c6b344) |
 | 2.0.6 | [v2022.1.4](https://github.com/freifunk-gluon/gluon/commit/b9a621f68c909fc1de550ce165681ae14b75d915) |
 | 2.0.5 | [v2022.1.3](https://github.com/freifunk-gluon/gluon/commit/43954dd1652b44ed0618c98e44fad05dae3fa25a) |
 | 2.0.4 | [v2022.1.2](https://github.com/freifunk-gluon/gluon/commit/2751daa655c8adae66ffd2c004a4fca060ae1d43) |
