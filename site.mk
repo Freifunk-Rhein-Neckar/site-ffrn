@@ -52,7 +52,7 @@ GLUON_FEATURES := \
 GLUON_SITE_PACKAGES := \
 	ca-bundle \
 	iwinfo \
-	libustream-wolfssl \
+	libustream-mbedtls \
 	respondd-module-airtime
 
 GLUON_SITE_PACKAGES_standard := \
