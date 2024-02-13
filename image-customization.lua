@@ -99,7 +99,44 @@ local pkgs_pci_net = {
 }
 
 if target('ath79') then
-	packages(pkgs_usb_serial)
+	if device({
+		'buffalo-wzr-hp-ag300h',
+		'devolo-wifi-pro-1750e',
+		'buffalo-wzr-600dhp',
+		'buffalo-wzr-hp-g300nh-rtl8366s',
+		'd-link-dir825b1',
+		'gl.inet-gl-ar150',
+		'gl.inet-6416',
+		'gl.inet-gl-ar150',
+		'gl.inet-gl-ar300m-nor',
+		'gl.inet-gl-ar300m-lite',
+		'gl.inet-gl-ar750',
+		'gl.inet-gl-ar750s-nor',
+		'gl.inet-gl-xe300',
+		'librerouter-v1',
+		'netgear-wndr3700',
+		'netgear-wndr3700-v2',
+		'netgear-wndr3700-v4',
+		'netgear-wndr3800',
+		'netgear-wndr3800ch',
+		'netgear-wndr4300',
+		'tp-link-archer-a7-v5',
+		'tp-link-archer-c5-v1',
+		'tp-link-archer-c7-v2',
+		'tp-link-archer-c7-v4',
+		'tp-link-archer-c7-v5',
+		'tp-link-archer-c59-v1',
+		'tp-link-tl-wdr3500-v1',
+		'tp-link-tl-wdr3600-v1',
+		'tp-link-tl-wdr4300-v1',
+		'tp-link-tl-wr842n-v3',
+		'tp-link-tl-wr902ac-v1',
+		'tp-link-tl-wr1043nd-v2',
+		'tp-link-tl-wr1043nd-v3',
+		'tp-link-tl-wr1043nd-v4',
+	}) then
+		packages(pkgs_usb_serial)
+	end
 end
 
 if target('ipq40xx') then
