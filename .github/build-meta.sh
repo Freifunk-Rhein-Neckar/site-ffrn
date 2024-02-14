@@ -13,13 +13,13 @@ GIT_COMMIT_DATE="$(git -C "$SCRIPT_DIR" log -1 --format=%cd --date=format:'%Y%m%
 # Build BROKEN by default. Disable for release builds.
 BROKEN="1"
 
-# Don't deploy by default. Enable for release and testing builds.
+# Don't deploy by default. Enable for release and nightly builds.
 DEPLOY="0"
 
 # Don't release by default. Enable for tags.
 CREATE_RELEASE="0"
 
-# Don't link release by default. Enable for testing.
+# Don't link release by default. Enable for nightly.
 LINK_RELEASE="0"
 
 # Target whitelist
@@ -33,10 +33,10 @@ fi
 
 # Release Branch regex
 RELEASE_BRANCH_RE="^v20[0-9]{2}\.[0-9]\.x$"
-# Regex for testing firmware tag
-TESTING_TAG_RE="^[2-9].[0-9]-[0-9]{8}$"
-# Regex for custom testing firmware tag
-CUSTOM_TESTING_TAG_RE="^[2-9].[0-9]-[0-9]{8}"
+# Regex for nightly firmware tag
+NIGHTLY_TAG_RE="^[2-9].[0-9].x-[0-9]{8}$"
+# Regex for custom nightly firmware tag
+CUSTOM_NIGHTLY_TAG_RE="^[2-9].[0-9].x-[0-9]{8}"
 # Regex for release firmware tag
 RELEASE_TAG_RE="^[2-9].[0-9].[0-9]$"
 
@@ -60,12 +60,13 @@ DEFAULT_RELEASE_VERSION="$DEFAULT_RELEASE_VERSION-$GIT_SHORT_HASH"
 
 # Create site-version from site.mk
 SITE_VERSION="$(make --no-print-directory -C "$SCRIPT_DIR/.." -f ci-build.mk site-version)"
-SITE_VERSION="$SITE_VERSION-ffda-$GIT_COMMIT_DATE-$GIT_SHORT_HASH"
+SITE_VERSION="$SITE_VERSION-ffrn-$GIT_COMMIT_DATE-$GIT_SHORT_HASH"
 
 # Enable Manifest generation conditionally
 MANIFEST_STABLE="0"
 MANIFEST_BETA="0"
-MANIFEST_TESTING="0"
+MANIFEST_EXPERIMENTAL="0"
+MANIFEST_NIGHTLY="0"
 
 # Only Sign manifest on release builds
 SIGN_MANIFEST="0"
@@ -76,11 +77,11 @@ echo "GitHub Ref-Name: $GITHUB_REF_NAME"
 
 if [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "branch" ]; then
 	if [ "$GITHUB_REF_NAME" = "master" ]; then
-		# Push to master - autoupdater Branch is testing and enabled
+		# Push to master - autoupdater Branch is nightly and enabled
 		AUTOUPDATER_ENABLED="1"
-		AUTOUPDATER_BRANCH="testing"
+		AUTOUPDATER_BRANCH="nightly"
 
-		MANIFEST_TESTING="1"
+		MANIFEST_NIGHTLY="1"
 	elif [[ "$GITHUB_REF_NAME" =~ $RELEASE_BRANCH_RE ]]; then
 		# Push to release branch - autoupdater Branch is stable and enabled
 		AUTOUPDATER_ENABLED="1"
@@ -88,21 +89,22 @@ if [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "branch" ]; then
 
 		MANIFEST_STABLE="1"
 		MANIFEST_BETA="1"
+		MANIFEST_EXPERIMENTAL="1"
 	else
 		# Push to unknown branch - Disable autoupdater
 		AUTOUPDATER_ENABLED="0"
-		AUTOUPDATER_BRANCH="testing"
+		AUTOUPDATER_BRANCH="nightly"
 	fi
 elif [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "tag" ]; then
-	if [[ "$GITHUB_REF_NAME" =~ $TESTING_TAG_RE ]]; then
-		# Testing release - autoupdater Branch is testing and enabled
+	if [[ "$GITHUB_REF_NAME" =~ $NIGHTLY_TAG_RE ]]; then
+		# Nightly release - autoupdater Branch is nightly and enabled
 		AUTOUPDATER_ENABLED="1"
-		AUTOUPDATER_BRANCH="testing"
+		AUTOUPDATER_BRANCH="nightly"
 
-		MANIFEST_TESTING="1"
+		MANIFEST_NIGHTLY="1"
 		SIGN_MANIFEST="1"
 
-		RELEASE_VERSION="$(echo "$GITHUB_REF_NAME" | tr '-' '~')"
+		RELEASE_VERSION="$GITHUB_REF_NAME"
 		DEPLOY="1"
 		LINK_RELEASE="1"
 	elif [[ "$GITHUB_REF_NAME" =~ $RELEASE_TAG_RE ]]; then
@@ -112,6 +114,7 @@ elif [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "tag" ]; then
 
 		MANIFEST_STABLE="1"
 		MANIFEST_BETA="1"
+		MANIFEST_EXPERIMENTAL="1"
 		SIGN_MANIFEST="1"
 
 		RELEASE_VERSION="$GITHUB_REF_NAME"
@@ -120,22 +123,20 @@ elif [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "tag" ]; then
 	else
 		# Unknown release - Disable autoupdater
 		AUTOUPDATER_ENABLED="0"
-		AUTOUPDATER_BRANCH="testing"
+		AUTOUPDATER_BRANCH="nightly"
 
-		if [[ "$GITHUB_REF_NAME" =~ $CUSTOM_TESTING_TAG_RE ]]; then
-			# Custom testing tag
+		if [[ "$GITHUB_REF_NAME" =~ $CUSTOM_NIGHTLY_TAG_RE ]]; then
+			# Custom nightly tag
 
-			# Replace first occurence of - with ~ of GITHUB_REF_NAME for RELEASE_VERSION
-			# shellcheck disable=SC2001
-			RELEASE_VERSION="$(echo "$GITHUB_REF_NAME" | sed 's/-/~/')"
+			RELEASE_VERSION="$GITHUB_REF_NAME"
 		fi
 	fi
 
 	CREATE_RELEASE="1"
 elif [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
-	# Workflow Dispatch - autoupdater Branch is testing and disabled
+	# Workflow Dispatch - autoupdater Branch is nightly and disabled
 	AUTOUPDATER_ENABLED="0"
-	AUTOUPDATER_BRANCH="testing"
+	AUTOUPDATER_BRANCH="nightly"
 else
 	echo "Unknown ref type $GITHUB_REF_TYPE"
 	exit 1
@@ -169,7 +170,8 @@ echo "autoupdater-branch=$AUTOUPDATER_BRANCH" >> "$BUILD_META_OUTPUT"
 echo "broken=$BROKEN" >> "$BUILD_META_OUTPUT"
 echo "manifest-stable=$MANIFEST_STABLE" >> "$BUILD_META_OUTPUT"
 echo "manifest-beta=$MANIFEST_BETA" >> "$BUILD_META_OUTPUT"
-echo "manifest-testing=$MANIFEST_TESTING" >> "$BUILD_META_OUTPUT"
+echo "manifest-experimental=$MANIFEST_EXPERIMENTAL" >> "$BUILD_META_OUTPUT"
+echo "manifest-nightly=$MANIFEST_NIGHTLY" >> "$BUILD_META_OUTPUT"
 echo "sign-manifest=$SIGN_MANIFEST" >> "$BUILD_META_OUTPUT"
 echo "deploy=$DEPLOY" >> "$BUILD_META_OUTPUT"
 echo "link-release=$LINK_RELEASE" >> "$BUILD_META_OUTPUT"

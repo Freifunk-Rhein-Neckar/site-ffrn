@@ -9,7 +9,7 @@ on:
       site-branch:
         description: "Site branch to update"
         required: true
-        default: "master"
+        default: "main"
       gluon-commit:
         description: "Gluon commit to update to"
         required: true
@@ -29,7 +29,7 @@ jobs:
       BUILD_INFO: .github/build-info.json
       BUILD_INFO_TMP: .github/build-info.json.tmp
       COMMIT_NAME: GitHub Actions
-      COMMIT_EMAIL: info@darmstadt.freifunk.net
+      COMMIT_EMAIL: info@freifunk-rhein-neckar.de
     steps:
       - name: Checkout
         uses: actions/checkout@v4

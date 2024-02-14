@@ -25,8 +25,8 @@ SCRIPT_DIR="$(dirname "$0")"
 
 RELEASE_NAME="${1-}"
 
-# Regex for testing firmware tag
-TESTING_TAG_RE="^[2-9].[0-9]~[0-9]{8}$"
+# Regex for nightly firmware tag
+NIGHTLY_TAG_RE="^[2-9].[0-9].x-[0-9]{8}$"
 # Regex for release firmware tag
 RELEASE_TAG_RE="^[2-9].[0-9].[0-9]$"
 
@@ -35,19 +35,16 @@ if [ -n "$RELEASE_NAME" ]; then
     if [[ "$RELEASE_NAME" =~ $RELEASE_TAG_RE ]]; then
         # Release Tag
         echo "Provided Release Name '$RELEASE_NAME' is valid"
-    elif [[ "$RELEASE_NAME" =~ $TESTING_TAG_RE ]]; then
-        # Testing Tag
-        echo "Provided Testing Name '$RELEASE_NAME' is valid"
+    elif [[ "$RELEASE_NAME" =~ $NIGHTLY_TAG_RE ]]; then
+        # Nightly Tag
+        echo "Provided Nightly Name '$RELEASE_NAME' is valid"
     else
         # Custom Tag
-        check_input_y "Provided release name is not a valid release or testing tag."
+        check_input_y "Provided release name is not a valid release or nightly tag."
     fi
 else
     RELEASE_NAME="$(make --no-print-directory -C "$SCRIPT_DIR/.." -f ci-build.mk version)"
 fi
-
-# Replace ~ with - in testing tags
-TAG_NAME="${RELEASE_NAME//\~/\-}"
 
 check_input_y "Proceed to tag firmware release for '$RELEASE_NAME' (Tag: '$TAG_NAME')?"
 
