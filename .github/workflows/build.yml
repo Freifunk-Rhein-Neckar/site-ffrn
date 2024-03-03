@@ -1,0 +1,515 @@
+---
+name: "Build Gluon images"
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'Repository path (e.g. freifunk-gluon/gluon)'
+        required: true
+      reference:
+        description: 'Reference (commit / tag)'
+        required: true
+      targets:
+        description: 'Targets to build (space separated)'
+        required: false
+
+jobs:
+  build-meta:
+    outputs:
+      container-version: >-
+        ${{ steps.build-metadata.outputs.container-version }}
+      release-version: >-
+        ${{ steps.build-metadata.outputs.release-version }}
+      site-version: >-
+        ${{ steps.build-metadata.outputs.site-version }}
+      autoupdater-enabled: >-
+        ${{ steps.build-metadata.outputs.autoupdater-enabled }}
+      autoupdater-branch: >-
+        ${{ steps.build-metadata.outputs.autoupdater-branch }}
+      broken: >-
+        ${{ steps.build-metadata.outputs.broken }}
+      gluon-repository: >-
+        ${{ steps.build-metadata.outputs.gluon-repository }}
+      gluon-commit: >-
+        ${{ steps.build-metadata.outputs.gluon-commit }}
+      manifest-stable: >-
+        ${{ steps.build-metadata.outputs.manifest-stable }}
+      manifest-beta: >-
+        ${{ steps.build-metadata.outputs.manifest-beta }}
+      manifest-testing: >-
+        ${{ steps.build-metadata.outputs.manifest-testing }}
+      sign-manifest: >-
+        ${{ steps.build-metadata.outputs.sign-manifest }}
+      create-release: >-
+        ${{ steps.build-metadata.outputs.create-release }}
+      deploy: >-
+        ${{ steps.build-metadata.outputs.deploy }}
+      link-release: >-
+        ${{ steps.build-metadata.outputs.link-release }}
+      target-whitelist: >-
+        ${{ steps.build-metadata.outputs.target-whitelist }}
+    env:
+      WORKFLOW_DISPATCH_REPOSITORY: ${{ github.event.inputs.repository }}
+      WORKFLOW_DISPATCH_REFERENCE: ${{ github.event.inputs.reference }}
+      WORKFLOW_DISPATCH_TARGETS: ${{ github.event.inputs.targets }}
+    runs-on: ubuntu-22.04
+    name: Determine build-meta
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get build-metadata
+        id: build-metadata
+        run: bash .github/build-meta.sh
+
+      - name: Create Artifact of build-meta
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-meta
+          path: ${{ steps.build-metadata.outputs.build-meta-output }}
+
+
+  targets:
+    needs: build-meta
+    outputs:
+      targets: ${{ steps.get-targets.outputs.targets }}
+    runs-on: ubuntu-22.04
+    name: Get Gluon targets
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.build-meta.outputs.gluon-repository }}
+          ref: ${{ needs.build-meta.outputs.gluon-commit }}
+          path: 'gluon-gha-data/gluon'
+
+      - name: Get Targets
+        uses: freifunk-gluon/action-target-list@v1
+        id: get-targets
+        with:
+          gluon-path: "gluon-gha-data/gluon"
+          broken: ${{ needs.build-meta.outputs.broken }}
+          allowlist: ${{ needs.build-meta.outputs.target-whitelist }}
+
+
+  host-tools:
+    needs: build-meta
+    runs-on: ubuntu-22.04
+    name: Build host-tools
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.build-meta.outputs.gluon-repository }}
+          ref: ${{ needs.build-meta.outputs.gluon-commit }}
+          path: 'gluon-gha-data/gluon'
+
+      - name: Determine Cache-Key
+        id: cache-key
+        run: >
+          echo "cache-key=$(bash .github/cache-key.sh
+          $GITHUB_WORKSPACE/gluon-gha-data/gluon)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore Cache
+        id: restore-cache-tools
+        uses: actions/cache/restore@v4
+        with:
+          path: gluon-gha-data/gluon/openwrt
+          key: openwrt-${{ steps.cache-key.outputs.cache-key }}
+
+      - name: Update Gluon
+        uses: freifunk-gluon/action-build@v1
+        if: steps.restore-cache-tools.outputs.cache-hit != 'true'
+        id: update-gluon
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          make-target: update
+          site-path: "."
+
+      - name: Build host-tools
+        uses: freifunk-gluon/action-build@v1
+        if: steps.restore-cache-tools.outputs.cache-hit != 'true'
+        id: build-host-tools
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          make-target: openwrt/staging_dir/hostpkg/bin/lua
+          site-path: "."
+
+      - name: Save Cache
+        id: save-cache-tools
+        if: >
+          github.ref_type != 'tag' &&
+          steps.restore-cache-tools.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: gluon-gha-data/gluon/openwrt
+          key: openwrt-${{ steps.cache-key.outputs.cache-key }}
+
+      - name: Create Artifact output directory
+        run: mkdir gluon-gha-data/openwrt
+
+      - name: Pack Output
+        run: >
+          tar cJf "gluon-gha-data/openwrt/openwrt.tar.xz"
+          --posix -C "gluon-gha-data/gluon" openwrt
+
+      - name: Archive build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt
+          path: "gluon-gha-data/openwrt"
+          compression-level: 0
+
+
+  build:
+    needs: [targets, build-meta, host-tools]
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJSON(needs.targets.outputs.targets) }}
+    runs-on: ubuntu-22.04
+    if: >
+      needs.targets.outputs.targets != '[]'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.build-meta.outputs.gluon-repository }}
+          ref: ${{ needs.build-meta.outputs.gluon-commit }}
+          path: 'gluon-gha-data/gluon'
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Fetch upstream tags
+        # yamllint disable rule:line-length
+        if: ${{ needs.build-meta.outputs.gluon-repository != 'freifunk-gluon/gluon' }}
+        run: |
+          git -C gluon-gha-data/gluon remote add upstream https://github.com/freifunk-gluon/gluon.git
+          git -C gluon-gha-data/gluon fetch upstream --tags
+        # yamllint enable rule:line-length
+
+      - name: Print CPU info
+        run: cat /proc/cpuinfo
+
+      - name: Print meminfo
+        run: cat /proc/meminfo
+
+      - name: Download prepared OpenWrt
+        uses: actions/download-artifact@v4
+        with:
+          name: openwrt
+          path: "gluon-gha-data/openwrt"
+
+      - name: Restore OpenWrt
+        run: >
+          tar xf gluon-gha-data/openwrt/openwrt.tar.xz -C gluon-gha-data/gluon
+
+      - name: Gluon Update
+        uses: freifunk-gluon/action-build@v1
+        id: update-gluon
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          hardware-target: ath79-generic
+          make-target: update
+
+      - name: Build
+        # yamllint disable-line rule:line-length
+        uses: freifunk-gluon/action-build@3a48a4d0db08ff393e08ec3074f1b218ee5ac54b
+        id: build-gluon
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          hardware-target: ${{ matrix.target }}
+          broken: ${{ needs.build-meta.outputs.broken }}
+          deprecated: "0"
+          autoupdater-enabled: |
+            ${{ needs.build-meta.outputs.autoupdater-enabled }}
+          autoupdater-branch: |
+            ${{ needs.build-meta.outputs.autoupdater-branch }}
+          release: ${{ needs.build-meta.outputs.release-version }}
+          site-version: ${{ needs.build-meta.outputs.site-version }}
+
+      - name: Pack and Upload build output
+        uses: ./.github/actions/build-artifact
+        with:
+          gluon-path: "gluon-gha-data/gluon"
+          hardware-target: ${{ matrix.target }}
+
+
+  manifest:
+    needs: [build, build-meta, targets]
+    runs-on: ubuntu-22.04
+    if: >
+      needs.targets.outputs.targets != '[]' &&
+      github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: "gluon-gha-data/gluon-output"
+
+      - name: Clone Gluon
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.build-meta.outputs.gluon-repository }}
+          ref: ${{ needs.build-meta.outputs.gluon-commit }}
+          path: 'gluon-gha-data/gluon'
+
+      - name: Download prepared OpenWrt
+        uses: actions/download-artifact@v4
+        with:
+          name: openwrt
+          path: "gluon-gha-data/openwrt"
+
+      - name: Restore OpenWrt
+        run: |
+          tar xf gluon-gha-data/openwrt/openwrt.tar.xz -C gluon-gha-data/gluon
+
+      - name: Combine Build output
+        uses: ./.github/actions/build-combine
+        with:
+          artifact-dir: "gluon-gha-data/gluon-output"
+          output-dir: "gluon-gha-data/gluon/output"
+          targets: ${{ needs.targets.outputs.targets }}
+
+      - name: Gluon Update
+        uses: freifunk-gluon/action-build@v1
+        id: update-gluon
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          make-target: update
+
+      - name: Manifest (Stable)
+        uses: freifunk-gluon/action-build@v1
+        if: ${{ needs.build-meta.outputs.manifest-stable != '0' }}
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          make-target: manifest
+          autoupdater-branch: stable
+          release: ${{ needs.build-meta.outputs.release-version }}
+          priority: 1
+
+      - name: Manifest (Beta)
+        uses: freifunk-gluon/action-build@v1
+        if: ${{ needs.build-meta.outputs.manifest-beta != '0' }}
+        with:
+          container-version: >-
+            ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          make-target: manifest
+          autoupdater-branch: beta
+          release: >-
+            ${{ needs.build-meta.outputs.release-version }}
+          priority: 1
+
+      - name: Manifest (Testing)
+        uses: freifunk-gluon/action-build@v1
+        if: ${{ needs.build-meta.outputs.manifest-testing != '0' }}
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          make-target: manifest
+          autoupdater-branch: testing
+          release: ${{ needs.build-meta.outputs.release-version }}
+          priority: 1
+          broken: ${{ needs.build-meta.outputs.broken }}
+
+      - name: Sign manifest (Stable)
+        uses: freifunk-gluon/action-sign@v1
+        if: >
+          needs.build-meta.outputs.manifest-stable != '0' &&
+          needs.build-meta.outputs.sign-manifest != '0'
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          manifest: >-
+            gluon-gha-data/gluon/output/images/sysupgrade/stable.manifest
+          signing-key: ${{ secrets.GHA_FFDA_BUILD_ECDSA_KEY_STABLE }}
+          write-signature: "true"
+
+      - name: Sign manifest (Beta)
+        uses: freifunk-gluon/action-sign@v1
+        if: >
+          needs.build-meta.outputs.manifest-beta != '0' &&
+          needs.build-meta.outputs.sign-manifest != '0'
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          manifest: >-
+            gluon-gha-data/gluon/output/images/sysupgrade/beta.manifest
+          signing-key: ${{ secrets.GHA_FFDA_BUILD_ECDSA_KEY_BETA }}
+          write-signature: "true"
+
+      - name: Sign manifest (Testing)
+        uses: freifunk-gluon/action-sign@v1
+        if: >
+          needs.build-meta.outputs.manifest-testing != '0' &&
+          needs.build-meta.outputs.sign-manifest != '0'
+        with:
+          container-version: ${{ needs.build-meta.outputs.container-version }}
+          gluon-path: "gluon-gha-data/gluon"
+          manifest: >-
+            gluon-gha-data/gluon/output/images/sysupgrade/testing.manifest
+          signing-key: ${{ secrets.GHA_FFDA_BUILD_ECDSA_KEY_TESTING }}
+          write-signature: "true"
+
+      - name: Create Artifact Directory
+        run: mkdir gluon-gha-data/artifact-out
+
+      - name: Structure
+        run: tree gluon-gha-data/gluon
+
+      - name: Pack Manifest
+        run: >
+          find ./gluon-gha-data/gluon/output/images/sysupgrade
+          -maxdepth 1 -name "*.manifest" -exec basename {} \; |
+          tar cJf gluon-gha-data/artifact-out/manifest.tar.xz
+          -C gluon-gha-data/gluon/output/images/sysupgrade -T -
+
+      - name: Archive output
+        uses: actions/upload-artifact@v4
+        with:
+          name: manifest-signed
+          path: gluon-gha-data/artifact-out
+
+
+  deploy:
+    needs: [build, build-meta, targets, manifest]
+    runs-on: ubuntu-22.04
+    if: >
+      needs.targets.outputs.targets != '[]' &&
+      needs.build-meta.outputs.deploy != '0' &&
+      github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: "gluon-gha-data/artifact-download"
+
+      - name: Create Directory to store Gluon output into
+        run: mkdir gluon-gha-data/gluon-output
+
+      - name: Combine Build output
+        uses: ./.github/actions/build-combine
+        with:
+          artifact-dir: "gluon-gha-data/artifact-download"
+          output-dir: "gluon-gha-data/gluon-output/output"
+          targets: ${{ needs.targets.outputs.targets }}
+
+      - name: Extract Manifest
+        run: >
+          tar xf
+          gluon-gha-data/artifact-download/manifest-signed/manifest.tar.xz
+          -C gluon-gha-data/gluon-output/output/images/sysupgrade
+
+      - name: Save SSH Key for deployment
+        run: >
+          mkdir -p ~/.ssh &&
+          echo "${{ secrets.GHA_FFDA_BUILD_DEPLOY_SSH_KEY }}" >
+          ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+
+      - name: Deploy Images
+        # yamllint disable-line rule:line-length
+        run: rsync -avzP -e "ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -oIdentitiesOnly=yes" gluon-gha-data/gluon-output/output/images/{factory,sysupgrade,other} "firmware@www1.darmstadt.freifunk.net:/srv/firmware/images/${{ needs.build-meta.outputs.release-version }}/"
+
+      - name: Deploy Packages
+        # ToDo: Remove 'ffda' site-code and move to build-meta
+        # yamllint disable-line rule:line-length
+        run: rsync -avzP -e "ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -oIdentitiesOnly=yes" "gluon-gha-data/gluon-output/output/packages/gluon-ffda-${{ needs.build-meta.outputs.release-version }}" "firmware@www1.darmstadt.freifunk.net:/srv/firmware/modules/"
+
+
+  link-release:
+    needs: [build, build-meta, targets, manifest, deploy]
+    runs-on: ubuntu-22.04
+    if: >
+      needs.targets.outputs.targets != '[]' &&
+      needs.build-meta.outputs.deploy != '0' &&
+      needs.build-meta.outputs.link-release != '0' &&
+      github.event_name == 'push'
+    steps:
+      - name: Save SSH Key for deployment
+        run: >
+          mkdir -p ~/.ssh &&
+          echo "${{ secrets.GHA_FFDA_BUILD_DEPLOY_SSH_KEY }}" >
+          ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+      - name: Link Release
+        env:
+          RELEASE_VERSION: ${{ needs.build-meta.outputs.release-version }}
+          AUTOUPDATER_BRANCH: ${{ needs.build-meta.outputs.autoupdater-branch }}
+        # yamllint disable rule:line-length
+        run: >
+          ssh
+          -i ~/.ssh/deploy_key
+          -q
+          -oUserKnownHostsFile=/dev/null
+          -oStrictHostKeyChecking=no
+          -oIdentitiesOnly=yes
+          firmware@www1.darmstadt.freifunk.net
+          "ln -n -f -s /srv/firmware/images/$RELEASE_VERSION /srv/firmware/images/$AUTOUPDATER_BRANCH"
+        # yamllint enable rule:line-length
+
+
+  create-release:
+    needs: [build, build-meta, targets, manifest]
+    runs-on: ubuntu-22.04
+    if: >
+      needs.targets.outputs.targets != '[]' &&
+      needs.build-meta.outputs.create-release != '0' &&
+      github.event_name == 'push'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: "gluon-gha-data/artifact-download"
+
+      - name: Create Directory to store Gluon output into
+        run: mkdir gluon-gha-data/gluon-output
+
+      - name: Download target Artifacts
+        uses: ./.github/actions/build-combine
+        with:
+          artifact-dir: "gluon-gha-data/artifact-download"
+          output-dir: "gluon-gha-data/release-artifacts"
+          targets: ${{ needs.targets.outputs.targets }}
+          keep-packed: 1
+
+      - name: Move manifest archive
+        run: >-
+          mv gluon-gha-data/artifact-download/manifest-signed/manifest.tar.xz
+          gluon-gha-data/release-artifacts/manifest.tar.xz
+
+      - name: Move manifest archive
+        run: >-
+          mv gluon-gha-data/artifact-download/build-meta/build-meta.txt
+          gluon-gha-data/release-artifacts/build-meta.txt
+
+      - name: Show File sizes
+        run: du -sh gluon-gha-data/release-artifacts/*
+
+      - name: Create Release Notes
+        run: >-
+          bash .github/create-release-notes.sh
+          gluon-gha-data/release-artifacts/build-meta.txt
+          gluon-gha-data/release-notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: gluon-gha-data/release-notes.md
+          files: |
+            gluon-gha-data/release-artifacts/*

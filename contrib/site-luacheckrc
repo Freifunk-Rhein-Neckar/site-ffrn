@@ -1,0 +1,12 @@
+std = {
+	read_globals = {
+		"features",
+		"packages",
+		"broken",
+		"disable",
+		"disable_factory",
+		"device",
+		"target",
+		"device_class",
+	}
+}
