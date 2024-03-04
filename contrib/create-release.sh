@@ -46,6 +46,9 @@ else
     RELEASE_NAME="$(make --no-print-directory -C "$SCRIPT_DIR/.." -f ci-build.mk version)"
 fi
 
+# add a "v" prefix to the tag
+TAG_NAME="v${RELEASE_NAME}"
+
 check_input_y "Proceed to tag firmware release for '$RELEASE_NAME' (Tag: '$TAG_NAME')?"
 
 echo "Proceeding to tag firmware release with $RELEASE_NAME"

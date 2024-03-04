@@ -34,11 +34,11 @@ fi
 # Release Branch regex
 RELEASE_BRANCH_RE="^v20[0-9]{2}\.[0-9]\.x$"
 # Regex for nightly firmware tag
-NIGHTLY_TAG_RE="^[2-9].[0-9].x-[0-9]{8}$"
+NIGHTLY_TAG_RE="^v[2-9].[0-9].x-[0-9]{8}$"
 # Regex for custom nightly firmware tag
-CUSTOM_NIGHTLY_TAG_RE="^[2-9].[0-9].x-[0-9]{8}"
+CUSTOM_NIGHTLY_TAG_RE="^v[2-9].[0-9].x-[0-9]{8}"
 # Regex for release firmware tag
-RELEASE_TAG_RE="^[2-9].[0-9].[0-9]$"
+RELEASE_TAG_RE="^v[2-9].[0-9].[0-9]$"
 
 # Get Gluon version information
 if [ -n "$WORKFLOW_DISPATCH_REPOSITORY" ] && [ -n "$WORKFLOW_DISPATCH_REFERENCE" ]; then
@@ -105,6 +105,8 @@ elif [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "tag" ]; then
 		SIGN_MANIFEST="1"
 
 		RELEASE_VERSION="$GITHUB_REF_NAME"
+		# remove v prefix
+		RELEASE_VERSION="${RELEASE_VERSION#"v"}"
 		DEPLOY="1"
 		LINK_RELEASE="1"
 	elif [[ "$GITHUB_REF_NAME" =~ $RELEASE_TAG_RE ]]; then
@@ -118,6 +120,8 @@ elif [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "tag" ]; then
 		SIGN_MANIFEST="1"
 
 		RELEASE_VERSION="$GITHUB_REF_NAME"
+		# remove v prefix
+		RELEASE_VERSION="${RELEASE_VERSION#"v"}"
 		BROKEN="0"
 		DEPLOY="1"
 	else
@@ -129,6 +133,8 @@ elif [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "tag" ]; then
 			# Custom nightly tag
 
 			RELEASE_VERSION="$GITHUB_REF_NAME"
+			# remove v prefix
+			RELEASE_VERSION="${RELEASE_VERSION#"v"}"
 		fi
 	fi
 
