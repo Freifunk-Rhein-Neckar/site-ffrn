@@ -48,6 +48,8 @@ jobs:
         ${{ steps.build-metadata.outputs.sign-manifest }}
       create-release: >-
         ${{ steps.build-metadata.outputs.create-release }}
+      pre-release: >-
+        ${{ steps.build-metadata.outputs.pre-release }}
       deploy: >-
         ${{ steps.build-metadata.outputs.deploy }}
       link-release: >-
@@ -550,6 +552,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ needs.build-meta.outputs.release-version }}
+          # yamllint disable rule:line-length
+          prerelease: ${{ needs.build-meta.outputs.pre-release == '1' && 'true' || '' }}
+          # yamllint enable rule:line-length
           body_path: gluon-gha-data/release-notes.md
           files: |
             gluon-gha-data/release-artifacts/*

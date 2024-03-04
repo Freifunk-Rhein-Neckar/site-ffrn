@@ -19,6 +19,9 @@ DEPLOY="0"
 # Don't release by default. Enable for tags.
 CREATE_RELEASE="0"
 
+# Create pre-releases by default. Disable for release builds.
+PRE_RELEASE="1"
+
 # Don't link release by default. Enable for nightly.
 LINK_RELEASE="0"
 
@@ -124,6 +127,7 @@ elif [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "tag" ]; then
 		RELEASE_VERSION="${RELEASE_VERSION#"v"}"
 		BROKEN="0"
 		DEPLOY="1"
+		PRE_RELEASE="0"
 	else
 		# Unknown release - Disable autoupdater
 		AUTOUPDATER_ENABLED="0"
@@ -182,6 +186,7 @@ echo "sign-manifest=$SIGN_MANIFEST" >> "$BUILD_META_OUTPUT"
 echo "deploy=$DEPLOY" >> "$BUILD_META_OUTPUT"
 echo "link-release=$LINK_RELEASE" >> "$BUILD_META_OUTPUT"
 echo "create-release=$CREATE_RELEASE" >> "$BUILD_META_OUTPUT"
+echo "pre-release=$PRE_RELEASE" >> "$BUILD_META_OUTPUT"
 echo "target-whitelist=$TARGET_WHITELIST" >> "$BUILD_META_OUTPUT"
 
 # Copy over to GITHUB_OUTPUT
