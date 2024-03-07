@@ -1,0 +1,29 @@
+name: "Combine artifacts"
+description: "Combine artifacts built by build-artifact"
+inputs:
+  artifact-dir:
+    description: 'Path to downloaded artifacts'
+    required: true
+  output-dir:
+    description: 'Path to store the combined output directory into'
+    required: true
+  keep-packed:
+    description: 'Instead of extracting and combining the output folders, keep the archive packed (Default: 0)'
+    default: 0
+  delete-combined:
+    description: 'Delete artifact downloads which were combined (Default: 1)'
+    default: 1
+  targets:
+    description: 'JSON Array containing all names of targets build-jobs were created for'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - run: bash $GITHUB_ACTION_PATH/combine-build.sh
+      shell: bash
+      env:
+        ACTION_ARTIFACT_DIR: ${{ inputs.artifact-dir }}
+        ACTION_DELETE_COMBINED: ${{ inputs.delete-combined }}
+        ACTION_KEEP_PACKED: ${{ inputs.keep-packed }}
+        ACTION_OUTPUT_DIR: ${{ inputs.output-dir }}
+        ACTION_TARGETS: ${{ inputs.targets }}

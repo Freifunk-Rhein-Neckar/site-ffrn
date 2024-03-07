@@ -1,0 +1,23 @@
+name: "Create Artifact for single-target Gluon-build"
+description: "Create an artifact for a single Gluon-target which can be re-used with the build-combine action"
+inputs:
+  gluon-path:
+    description: 'Path to Gluon repository containing the output directory'
+    required: true
+  hardware-target:
+    description: 'Hardware target to create the artifact for'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - run: mkdir -p "$GITHUB_WORKSPACE/build-artifact-workdir"
+      shell: bash
+    - run: tar -cJf "$GITHUB_WORKSPACE/build-artifact-workdir/output.tar.xz" -C ${{ inputs.gluon-path }}/output images packages debug
+      shell: bash
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.hardware-target }}
+        path: build-artifact-workdir
+        compression-level: 0
+    - run: rm -rf "$GITHUB_WORKSPACE/build-artifact-workdir"
+      shell: bash

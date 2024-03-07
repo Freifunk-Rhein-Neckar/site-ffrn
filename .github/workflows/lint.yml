@@ -1,0 +1,58 @@
+---
+name: "Lint"
+
+# yamllint disable-line rule:truthy
+on: [push, pull_request]
+
+jobs:
+  lint-yaml:
+    name: "YAML"
+    runs-on: ubuntu-22.04
+    env:
+      YAML_FILES: |
+        .github/workflows/*.yml
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y yamllint
+      - name: Validate YAML Files
+        run: yamllint $YAML_FILES
+
+  shellcheck:
+    name: "Shell Scripts"
+    runs-on: ubuntu-22.04
+    env:
+      SHELL_FILES: >-
+        contrib/*.sh
+        .github/*.sh
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Validate Shell Scripts
+        run: shellcheck $SHELL_FILES
+
+  image-customization:
+    name: "Image-Customization"
+    runs-on: ubuntu-22.04
+    env:
+      LUA_FILES: >-
+        image-customization.lua
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: sudo apt-get -y update && sudo apt-get -y install lua-check
+      - name: Lint Image-Customization
+        run: luacheck --config contrib/site-luacheckrc $LUA_FILES
+
+  json:
+    name: "JSON"
+    runs-on: ubuntu-22.04
+    env:
+      BUILD_INFO: ${{ github.workspace }}/.github/build-info.json
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Validator
+        run: sudo apt-get update && sudo apt-get install -y python3-demjson
+      - name: Run validation
+        run: jsonlint -v "$BUILD_INFO"

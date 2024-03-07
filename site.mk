@@ -7,7 +7,9 @@
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-DEFAULT_GLUON_RELEASE := 2.1.x-$(shell date '+%Y%m%d')
+FFRN_SITE_VERSION := 2.1
+
+DEFAULT_GLUON_RELEASE := $(FFRN_SITE_VERSION).x-$(shell date '+%Y%m%d')
 DEFAULT_GLUON_PRIORITY := 0
 
 # multidomain support
