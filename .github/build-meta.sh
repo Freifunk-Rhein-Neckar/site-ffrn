@@ -79,8 +79,8 @@ echo "GitHub Ref-Type: $GITHUB_REF_TYPE"
 echo "GitHub Ref-Name: $GITHUB_REF_NAME"
 
 if [ "$GITHUB_EVENT_NAME" = "push"  ] && [ "$GITHUB_REF_TYPE" = "branch" ]; then
-	if [ "$GITHUB_REF_NAME" = "master" ]; then
-		# Push to master - autoupdater Branch is nightly and enabled
+	if [ "$GITHUB_REF_NAME" = "main" ]; then
+		# Push to main - autoupdater Branch is nightly and enabled
 		AUTOUPDATER_ENABLED="1"
 		AUTOUPDATER_BRANCH="nightly"
 
