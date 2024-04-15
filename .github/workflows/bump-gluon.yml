@@ -80,7 +80,7 @@ jobs:
 
       - name: Commit and push changes
         if: steps.head-hash.outputs.hash != steps.build-info-hash.outputs.hash
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: ${{ steps.commit-message.outputs.msg }}
           commit_options: '--no-verify --signoff'
