@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: sudo apt-get update && sudo apt-get install -y shellcheck
       - name: Validate Shell Scripts
-        run: shellcheck $SHELL_FILES
+        run: shellcheck --external-sources --source-path=SCRIPTDIR $SHELL_FILES
 
   image-customization:
     name: "Image-Customization"
