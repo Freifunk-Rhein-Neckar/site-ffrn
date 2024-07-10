@@ -53,7 +53,7 @@ check_input_y "Proceed to tag firmware release for '$RELEASE_NAME' (Tag: '$TAG_N
 
 echo "Proceeding to tag firmware release with $RELEASE_NAME"
 
-git tag "$TAG_NAME" -m "$RELEASE_NAME"
+git tag "$TAG_NAME" -m "$RELEASE_NAME" -s
 
 echo "Tag was created"
 echo "Push with 'git push origin $TAG_NAME'"
