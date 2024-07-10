@@ -19,7 +19,7 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 ## Branches
 
 * `main`:
-    * matches Gluons `master` branch
+    * matches Gluons `main` branch
     * published as nightly
     * firmware version: 2.1.x-yyyymmdd
 * `v2023.1.x`:
