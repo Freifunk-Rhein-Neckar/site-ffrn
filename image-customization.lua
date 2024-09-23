@@ -21,6 +21,7 @@ features({
 packages({
 	'iwinfo',
 	'respondd-module-airtime',
+	'ffda-node-whisperer',
 })
 
 -- Packages and features for devices which are not flagged as tiny
