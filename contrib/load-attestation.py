@@ -67,8 +67,8 @@ def print_attestation(data):
 
     build_commit = build_definition["resolvedDependencies"][0]["digest"]["gitCommit"]
     print(f"  Commit: {build_commit}")
-    print(f"  Run: {run_details["metadata"]["invocationId"]}")
-
+    invocation_id = run_details["metadata"]["invocationId"]
+    print(f"  Run: {invocation_id}")
 
 if __name__ == "__main__":
     # Command: load-attestation.py [-o <owner> -r <repo>] <file-path>
