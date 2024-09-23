@@ -168,6 +168,13 @@ if [ "${GITHUB_REPOSITORY,,}" != "${UPSTREAM_REPO_NAME,,}" ] && [ "$SIGN_MANIFES
 	echo "::warning::Skip manifest signature due to action running in fork."
 fi
 
+# We should neither deploy in a fork, as the workflow is hard-coding our firmware-server
+if [ "$GITHUB_REPOSITORY" != "$UPSTREAM_REPO_NAME" ] && [ "$DEPLOY" != "0" ]; then
+	DEPLOY="0"
+
+	echo "::warning::Skip deployment due to action running in fork."
+fi
+
 # Determine Version to use
 RELEASE_VERSION="${RELEASE_VERSION:-$DEFAULT_RELEASE_VERSION}"
 
