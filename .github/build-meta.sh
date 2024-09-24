@@ -3,6 +3,7 @@
 set -euxo pipefail
 
 SCRIPT_DIR="$(dirname "$0")"
+UPSTREAM_REPO_NAME="freifunk-rhein-neckar/site-ffrn"
 
 # Get Git short hash for repo at $SCRIPT_DIR
 GIT_SHORT_HASH="$(git -C "$SCRIPT_DIR" rev-parse --short HEAD)"
@@ -157,6 +158,21 @@ if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
 	DEPLOY="0"
 	CREATE_RELEASE="0"
 	SIGN_MANIFEST="0"
+fi
+
+# Signing should only happen when pushed to the upstream repository.
+# Skip this step for the pipeline to succeed but inform the user.
+if [ "${GITHUB_REPOSITORY,,}" != "${UPSTREAM_REPO_NAME,,}" ] && [ "$SIGN_MANIFEST" != "0" ]; then
+	SIGN_MANIFEST="0"
+
+	echo "::warning::Skip manifest signature due to action running in fork."
+fi
+
+# We should neither deploy in a fork, as the workflow is hard-coding our firmware-server
+if [ "$GITHUB_REPOSITORY" != "$UPSTREAM_REPO_NAME" ] && [ "$DEPLOY" != "0" ]; then
+	DEPLOY="0"
+
+	echo "::warning::Skip deployment due to action running in fork."
 fi
 
 # Determine Version to use
