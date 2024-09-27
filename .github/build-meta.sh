@@ -169,7 +169,7 @@ if [ "${GITHUB_REPOSITORY,,}" != "${UPSTREAM_REPO_NAME,,}" ] && [ "$SIGN_MANIFES
 fi
 
 # We should neither deploy in a fork, as the workflow is hard-coding our firmware-server
-if [ "$GITHUB_REPOSITORY" != "$UPSTREAM_REPO_NAME" ] && [ "$DEPLOY" != "0" ]; then
+if [ "${GITHUB_REPOSITORY,,}" != "${UPSTREAM_REPO_NAME,,}" ] && [ "$DEPLOY" != "0" ]; then
 	DEPLOY="0"
 
 	echo "::warning::Skip deployment due to action running in fork."
