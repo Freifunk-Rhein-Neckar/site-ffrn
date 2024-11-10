@@ -17,6 +17,12 @@ on:
         description: 'Targets to build (space separated)'
         required: false
 
+concurrency:
+  # yamllint disable rule:line-length
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ github.event.pull_request.number || github.run_id }}
+  # yamllint enable rule:line-length
+  cancel-in-progress: true
+
 jobs:
   build-meta:
     outputs:
