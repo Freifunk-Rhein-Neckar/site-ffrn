@@ -238,6 +238,9 @@ jobs:
       - name: Print meminfo
         run: cat /proc/meminfo
 
+      - name: Remove non-required software
+        run: bash .github/free-runner-space.sh
+
       - name: Download prepared OpenWrt
         uses: actions/download-artifact@v4
         with:
