@@ -292,6 +292,21 @@ jobs:
             "gluon-gha-data/gluon/output/images/other/*"
             "gluon-gha-data/gluon/output/images/factory/*"
 
+  # target job for required status check of build success
+  build-complete:
+    name: All Targets Build
+    runs-on: ubuntu-22.04
+    needs: [build, build-meta, targets]
+    if: ${{ !cancelled() }}
+    steps:
+      - name: Error out if there is a failure
+        if: ${{ needs.build.result != 'success' }}
+        run: |
+          echo "Build Matrix Result: ${{ needs.build.result }}"
+          exit 1
+      - name: All firmware builds succeded
+        run: echo "All firmware builds succeded!"
+
   manifest:
     needs: [build, build-meta, targets]
     runs-on: ubuntu-22.04
