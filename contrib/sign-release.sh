@@ -7,8 +7,10 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "${SCRIPT_DIR}/functions-sign.sh"
 
 function usage() {
-    echo "Usage: $0 <release-version> <private-key-path>"
-    echo "Example: $0 2.0.0 /path/to/private-key.ecdsakey"
+    echo "Usage: $0 <release-version> [<private-key-path>]"
+    echo "Example: $0 v2.0.0 /path/to/private-key.ecdsakey"
+    echo ""
+    echo "The script expects the private key via stdin if no private-key-path is provided."
     exit 1
 }
 
@@ -26,9 +28,12 @@ GITHUB_REPOSITORY_URL="${GITHUB_REPOSITORY_URL:-$DEFAULT_GITHUB_REPOSITORY_URL}"
 
 RELEASE_VERSION="${1:-}"
 PRIVATE_KEY_PATH="${2:-}"
+PRIVATE_KEY=""
 
 [ -z "$RELEASE_VERSION" ] && usage
-[ -z "$PRIVATE_KEY_PATH" ] && usage
+[ -n "$PRIVATE_KEY_PATH" ] && PRIVATE_KEY="$(cat "$PRIVATE_KEY_PATH")"
+[ -z "$PRIVATE_KEY" ] && [ ! -t 0 ] && PRIVATE_KEY=$(cat)
+[ -z "$PRIVATE_KEY" ] && usage
 
 # Create Temporary working directory
 TEMP_DIR="$(mktemp -d)"
@@ -61,7 +66,7 @@ for manifest_path in "${TEMP_DIR}/"*.manifest; do
 
     # Get Signature
     echo "-- Signature for $manifest_branch_name --"
-    create_signature "$manifest_path" "$PRIVATE_KEY_PATH"
+    create_signature "$manifest_path" "$PRIVATE_KEY"
 done
 
 # Remove Temporary working directory

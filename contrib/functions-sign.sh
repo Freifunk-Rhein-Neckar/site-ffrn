@@ -40,7 +40,7 @@ function create_signature() {
     split_manifest "$manifest" "$upper" "$lower"
 
     # Sign upper part of manifest
-    ecdsasign "$upper" < "$secret"
+    ecdsasign "$upper" <<< "$secret"
 
     # Remove temporary files
     rm -f "$upper" "$lower"
