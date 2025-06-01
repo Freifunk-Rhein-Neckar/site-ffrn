@@ -24,6 +24,17 @@ packages({
 	'ffda-node-whisperer',
 })
 
+-- Enable SQM only on targets which have the CPU capabilities
+-- to use CAKE
+if not target('ath79')
+	and not target('ramips')
+	and not target('lantiq')
+	then
+	features({
+		'mesh-vpn-sqm'
+	})
+end
+
 -- Packages and features for devices which are not flagged as tiny
 if not device_class('tiny') then
 	packages({
@@ -31,7 +42,6 @@ if not device_class('tiny') then
 	})
 
 	features({
-		'mesh-vpn-sqm',
 		'tls',
 		'web-cellular',
 		'wireless-encryption-wpa3'
