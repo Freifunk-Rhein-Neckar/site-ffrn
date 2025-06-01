@@ -17,6 +17,12 @@ on:
         description: 'Targets to build (space separated)'
         required: false
 
+concurrency:
+  # yamllint disable rule:line-length
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ github.event.pull_request.number || github.run_id }}
+  # yamllint enable rule:line-length
+  cancel-in-progress: true
+
 jobs:
   build-meta:
     outputs:
@@ -232,6 +238,9 @@ jobs:
       - name: Print meminfo
         run: cat /proc/meminfo
 
+      - name: Remove non-required software
+        run: bash .github/free-runner-space.sh
+
       - name: Download prepared OpenWrt
         uses: actions/download-artifact@v4
         with:
@@ -282,6 +291,21 @@ jobs:
             "gluon-gha-data/gluon/output/images/sysupgrade/*"
             "gluon-gha-data/gluon/output/images/other/*"
             "gluon-gha-data/gluon/output/images/factory/*"
+
+  # target job for required status check of build success
+  build-complete:
+    name: All Targets Build
+    runs-on: ubuntu-22.04
+    needs: [build, build-meta, targets]
+    if: ${{ !cancelled() }}
+    steps:
+      - name: Error out if there is a failure
+        if: ${{ needs.build.result != 'success' }}
+        run: |
+          echo "Build Matrix Result: ${{ needs.build.result }}"
+          exit 1
+      - name: All firmware builds succeded
+        run: echo "All firmware builds succeded!"
 
   manifest:
     needs: [build, build-meta, targets]
