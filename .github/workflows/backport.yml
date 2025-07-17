@@ -7,8 +7,8 @@ on:
     types: [closed, labeled]
 
 permissions:
-  contents: write # so it can comment
-  pull-requests: write # so it can create pull requests
+  contents: write  # so it can comment
+  pull-requests: write  # so it can create pull requests
 
 jobs:
   # yamllint disable rule:line-length
