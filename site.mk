@@ -7,7 +7,7 @@
 #			opkg compare-versions "$1" '>>' "$2"
 #		to decide if a version is newer or not.
 
-FFRN_SITE_VERSION := 2.3
+FFRN_SITE_VERSION := 2.4
 
 DEFAULT_GLUON_RELEASE := $(FFRN_SITE_VERSION).x-$(shell date '+%Y%m%d')
 DEFAULT_GLUON_PRIORITY := 0

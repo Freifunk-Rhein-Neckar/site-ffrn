@@ -4,4 +4,4 @@ PACKAGES_FFRN_REPO=https://github.com/Freifunk-Rhein-Neckar/ffrn-packages.git
 PACKAGES_FFRN_COMMIT=b50c8ff1616b80dc0180adbee0b578c97ae4d0b6
 
 PACKAGES_COMMUNITY_REPO=https://github.com/freifunk-gluon/community-packages.git
-PACKAGES_COMMUNITY_COMMIT=4a90cd221e8eba254ffc8dc5addbf3374b830415
+PACKAGES_COMMUNITY_COMMIT=0f6d8131376528f5d9ddc1f88e3ea2f679a51f04
