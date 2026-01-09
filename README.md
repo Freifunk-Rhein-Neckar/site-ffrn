@@ -21,7 +21,7 @@ If you have any questions, please feel welcome to contact the community: [Kontak
 * `main`:
     * matches Gluons `main` branch
     * published as nightly
-    * firmware version: v2.4.x-yyyymmdd
+    * firmware version: v2.5.x-yyyymmdd
 * `v2025.1.x`:
     * matches Gluon `v2025.1.x` branch
     * firmware version: v2.4.x
