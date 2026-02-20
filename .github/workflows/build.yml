@@ -150,7 +150,7 @@ jobs:
           key: openwrt-${{ steps.cache-key.outputs.cache-key }}
 
       - name: Update Gluon
-        uses: freifunk-gluon/action-build@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         if: steps.restore-cache-tools.outputs.cache-hit != 'true'
         id: update-gluon
         with:
@@ -160,7 +160,7 @@ jobs:
           site-path: "."
 
       - name: Build host-tools
-        uses: freifunk-gluon/action-build@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         if: steps.restore-cache-tools.outputs.cache-hit != 'true'
         id: build-host-tools
         with:
@@ -252,7 +252,7 @@ jobs:
           tar xf gluon-gha-data/openwrt/openwrt.tar.xz -C gluon-gha-data/gluon
 
       - name: Gluon Update
-        uses: freifunk-gluon/action-build@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         id: update-gluon
         with:
           container-version: ${{ needs.build-meta.outputs.container-version }}
@@ -262,7 +262,7 @@ jobs:
 
       - name: Build
         # yamllint disable-line rule:line-length
-        uses: freifunk-gluon/action-build@3a48a4d0db08ff393e08ec3074f1b218ee5ac54b
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         id: build-gluon
         with:
           container-version: ${{ needs.build-meta.outputs.container-version }}
@@ -351,7 +351,7 @@ jobs:
           targets: ${{ needs.targets.outputs.targets }}
 
       - name: Gluon Update
-        uses: freifunk-gluon/action-build@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         id: update-gluon
         with:
           container-version: ${{ needs.build-meta.outputs.container-version }}
@@ -359,7 +359,7 @@ jobs:
           make-target: update
 
       - name: Manifest (Stable)
-        uses: freifunk-gluon/action-build@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         if: ${{ needs.build-meta.outputs.manifest-stable != '0' }}
         with:
           container-version: ${{ needs.build-meta.outputs.container-version }}
@@ -370,7 +370,7 @@ jobs:
           priority: 1
 
       - name: Manifest (Beta)
-        uses: freifunk-gluon/action-build@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         if: ${{ needs.build-meta.outputs.manifest-beta != '0' }}
         with:
           container-version: >-
@@ -383,7 +383,7 @@ jobs:
           priority: 1
 
       - name: Manifest (Experimental)
-        uses: freifunk-gluon/action-build@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         if: ${{ needs.build-meta.outputs.manifest-experimental != '0' }}
         with:
           container-version: >-
@@ -396,7 +396,7 @@ jobs:
           priority: 1
 
       - name: Manifest (Nightly)
-        uses: freifunk-gluon/action-build@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
         if: ${{ needs.build-meta.outputs.manifest-nightly != '0' }}
         with:
           container-version: ${{ needs.build-meta.outputs.container-version }}
@@ -408,7 +408,7 @@ jobs:
           broken: ${{ needs.build-meta.outputs.broken }}
 
       - name: Sign manifest (Stable)
-        uses: freifunk-gluon/action-sign@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-sign@v2
         if: >
           needs.build-meta.outputs.manifest-stable != '0' &&
           needs.build-meta.outputs.sign-manifest != '0'
@@ -421,7 +421,7 @@ jobs:
           write-signature: "true"
 
       - name: Sign manifest (Beta)
-        uses: freifunk-gluon/action-sign@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-sign@v2
         if: >
           needs.build-meta.outputs.manifest-beta != '0' &&
           needs.build-meta.outputs.sign-manifest != '0'
@@ -434,7 +434,7 @@ jobs:
           write-signature: "true"
 
       - name: Sign manifest (Experimental)
-        uses: freifunk-gluon/action-sign@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-sign@v2
         if: >
           needs.build-meta.outputs.manifest-experimental != '0' &&
           needs.build-meta.outputs.sign-manifest != '0'
@@ -448,7 +448,7 @@ jobs:
 
 
       - name: Sign manifest (Nightly)
-        uses: freifunk-gluon/action-sign@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-sign@v2
         if: >
           needs.build-meta.outputs.manifest-nightly != '0' &&
           needs.build-meta.outputs.sign-manifest != '0'
