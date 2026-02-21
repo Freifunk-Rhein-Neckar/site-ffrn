@@ -66,10 +66,10 @@ jobs:
       WORKFLOW_DISPATCH_REPOSITORY: ${{ github.event.inputs.repository }}
       WORKFLOW_DISPATCH_REFERENCE: ${{ github.event.inputs.reference }}
       WORKFLOW_DISPATCH_TARGETS: ${{ github.event.inputs.targets }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Determine build-meta
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set Timezone
         run: sudo timedatectl set-timezone Europe/Berlin
@@ -82,7 +82,7 @@ jobs:
         run: bash .github/build-meta.sh
 
       - name: Create Artifact of build-meta
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-meta
           path: ${{ steps.build-metadata.outputs.build-meta-output }}
@@ -92,12 +92,12 @@ jobs:
     needs: build-meta
     outputs:
       targets: ${{ steps.get-targets.outputs.targets }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Get Gluon targets
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: ${{ needs.build-meta.outputs.gluon-repository }}
           ref: ${{ needs.build-meta.outputs.gluon-commit }}
@@ -120,11 +120,11 @@ jobs:
 
   host-tools:
     needs: build-meta
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Build host-tools
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
           repository: ${{ needs.build-meta.outputs.gluon-repository }}
           ref: ${{ needs.build-meta.outputs.gluon-commit }}
@@ -144,7 +144,7 @@ jobs:
 
       - name: Restore Cache
         id: restore-cache-tools
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: gluon-gha-data/gluon/openwrt
           key: openwrt-${{ steps.cache-key.outputs.cache-key }}
@@ -174,7 +174,7 @@ jobs:
         if: >
           github.ref_type != 'tag' &&
           steps.restore-cache-tools.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: gluon-gha-data/gluon/openwrt
           key: openwrt-${{ steps.cache-key.outputs.cache-key }}
@@ -188,7 +188,7 @@ jobs:
           --posix -C "gluon-gha-data/gluon" openwrt
 
       - name: Archive build output
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: openwrt
           path: "gluon-gha-data/openwrt"
@@ -201,16 +201,16 @@ jobs:
       fail-fast: false
       matrix:
         target: ${{ fromJSON(needs.targets.outputs.targets) }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: >
       needs.targets.outputs.targets != '[]'
     permissions:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: ${{ needs.build-meta.outputs.gluon-repository }}
           ref: ${{ needs.build-meta.outputs.gluon-commit }}
@@ -242,7 +242,7 @@ jobs:
         run: bash .github/free-runner-space.sh
 
       - name: Download prepared OpenWrt
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: openwrt
           path: "gluon-gha-data/openwrt"
@@ -285,7 +285,7 @@ jobs:
 
       - name: Attest Image Build Provenance
         if: ${{ needs.build-meta.outputs.create-release != '0' }}
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: |
             "gluon-gha-data/gluon/output/images/sysupgrade/*"
@@ -295,7 +295,7 @@ jobs:
   # target job for required status check of build success
   build-complete:
     name: All Targets Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [build, build-meta, targets]
     if: ${{ !cancelled() }}
     steps:
@@ -309,12 +309,12 @@ jobs:
 
   manifest:
     needs: [build, build-meta, targets]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: >
       needs.targets.outputs.targets != '[]' &&
       github.event_name == 'push'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set Timezone
         run: sudo timedatectl set-timezone Europe/Berlin
@@ -322,19 +322,19 @@ jobs:
       - name: Show current Timezone settings
         run: timedatectl status
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           path: "gluon-gha-data/gluon-output"
 
       - name: Clone Gluon
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ needs.build-meta.outputs.gluon-repository }}
           ref: ${{ needs.build-meta.outputs.gluon-commit }}
           path: 'gluon-gha-data/gluon'
 
       - name: Download prepared OpenWrt
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: openwrt
           path: "gluon-gha-data/openwrt"
@@ -474,7 +474,7 @@ jobs:
           -C gluon-gha-data/gluon/output/images/sysupgrade -T -
 
       - name: Archive output
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: manifest-signed
           path: gluon-gha-data/artifact-out
@@ -482,13 +482,13 @@ jobs:
 
   deploy:
     needs: [build, build-meta, targets, manifest]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: >
       needs.targets.outputs.targets != '[]' &&
       needs.build-meta.outputs.deploy != '0' &&
       github.event_name == 'push'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set Timezone
         run: sudo timedatectl set-timezone Europe/Berlin
@@ -496,7 +496,7 @@ jobs:
       - name: Show current Timezone settings
         run: timedatectl status
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           path: "gluon-gha-data/artifact-download"
 
@@ -544,7 +544,7 @@ jobs:
 
   link-release:
     needs: [build, build-meta, targets, manifest, deploy]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: >
       needs.targets.outputs.targets != '[]' &&
       needs.build-meta.outputs.deploy != '0' &&
@@ -575,7 +575,7 @@ jobs:
 
   create-release:
     needs: [build, build-meta, targets, manifest]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: >
       needs.targets.outputs.targets != '[]' &&
       needs.build-meta.outputs.create-release != '0' &&
@@ -585,7 +585,7 @@ jobs:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set Timezone
         run: sudo timedatectl set-timezone Europe/Berlin
@@ -593,7 +593,7 @@ jobs:
       - name: Show current Timezone settings
         run: timedatectl status
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           path: "gluon-gha-data/artifact-download"
 
@@ -628,7 +628,7 @@ jobs:
           gluon-gha-data/release-notes.md
 
       - name: Attest Release Artifact Build Provenance
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: |
             gluon-gha-data/release-artifacts/*
