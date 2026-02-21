@@ -103,6 +103,7 @@ jobs:
           gh pr create
           -B ${{ github.event.inputs.site-branch }}
           -H bump-gluon-${{ github.event.inputs.site-branch }}-${{ steps.head-hash.outputs.short-hash }}
+          --reviewer "${{ github.actor }}"
           --fill
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
