@@ -56,6 +56,7 @@ else
 fi
 
 # Get Container version information
+CONTAINER_IMAGE="$(jq -r '.container?.image // ""' "$SCRIPT_DIR/build-info.json")"
 CONTAINER_VERSION="$(jq -r -e .container.version "$SCRIPT_DIR/build-info.json")"
 
 # Get Default Release version from site.mk
@@ -183,27 +184,35 @@ RELEASE_VERSION="${RELEASE_VERSION:-$DEFAULT_RELEASE_VERSION}"
 BUILD_META_TMP_DIR="$(mktemp -d)"
 BUILD_META_OUTPUT="$BUILD_META_TMP_DIR/build-meta.txt"
 
-# shellcheck disable=SC2129
-# Not the nicest way to do this, but it works.
-echo "build-meta-output=$BUILD_META_TMP_DIR" >> "$BUILD_META_OUTPUT"
-echo "container-version=$CONTAINER_VERSION" >> "$BUILD_META_OUTPUT"
-echo "gluon-repository=$GLUON_REPOSITORY" >> "$BUILD_META_OUTPUT"
-echo "gluon-commit=$GLUON_COMMIT" >> "$BUILD_META_OUTPUT"
-echo "site-version=$SITE_VERSION" >> "$BUILD_META_OUTPUT"
-echo "release-version=$RELEASE_VERSION" >> "$BUILD_META_OUTPUT"
-echo "autoupdater-enabled=$AUTOUPDATER_ENABLED" >> "$BUILD_META_OUTPUT"
-echo "autoupdater-branch=$AUTOUPDATER_BRANCH" >> "$BUILD_META_OUTPUT"
-echo "broken=$BROKEN" >> "$BUILD_META_OUTPUT"
-echo "manifest-stable=$MANIFEST_STABLE" >> "$BUILD_META_OUTPUT"
-echo "manifest-beta=$MANIFEST_BETA" >> "$BUILD_META_OUTPUT"
-echo "manifest-experimental=$MANIFEST_EXPERIMENTAL" >> "$BUILD_META_OUTPUT"
-echo "manifest-nightly=$MANIFEST_NIGHTLY" >> "$BUILD_META_OUTPUT"
-echo "sign-manifest=$SIGN_MANIFEST" >> "$BUILD_META_OUTPUT"
-echo "deploy=$DEPLOY" >> "$BUILD_META_OUTPUT"
-echo "link-release=$LINK_RELEASE" >> "$BUILD_META_OUTPUT"
-echo "create-release=$CREATE_RELEASE" >> "$BUILD_META_OUTPUT"
-echo "pre-release=$PRE_RELEASE" >> "$BUILD_META_OUTPUT"
-echo "target-whitelist=$TARGET_WHITELIST" >> "$BUILD_META_OUTPUT"
+write_output() {
+  local key="$1"
+  local value="$2"
+
+  if [ -n "$value" ]; then
+    echo "$key=$value" >> "$BUILD_META_OUTPUT"
+  fi
+}
+
+write_output "build-meta-output" "$BUILD_META_TMP_DIR"
+write_output "container-image" "$CONTAINER_IMAGE"
+write_output "container-version" "$CONTAINER_VERSION"
+write_output "gluon-repository" "$GLUON_REPOSITORY"
+write_output "gluon-commit" "$GLUON_COMMIT"
+write_output "site-version" "$SITE_VERSION"
+write_output "release-version" "$RELEASE_VERSION"
+write_output "autoupdater-enabled" "$AUTOUPDATER_ENABLED"
+write_output "autoupdater-branch" "$AUTOUPDATER_BRANCH"
+write_output "broken" "$BROKEN"
+write_output "manifest-stable" "$MANIFEST_STABLE"
+write_output "manifest-beta" "$MANIFEST_BETA"
+write_output "manifest-experimental" "$MANIFEST_EXPERIMENTAL"
+write_output "manifest-nightly" "$MANIFEST_NIGHTLY"
+write_output "sign-manifest" "$SIGN_MANIFEST"
+write_output "deploy" "$DEPLOY"
+write_output "link-release" "$LINK_RELEASE"
+write_output "create-release" "$CREATE_RELEASE"
+write_output "pre-release" "$PRE_RELEASE"
+write_output "target-whitelist" "$TARGET_WHITELIST"
 
 # Copy over to GITHUB_OUTPUT
 cat "$BUILD_META_OUTPUT" >> "$GITHUB_OUTPUT"
