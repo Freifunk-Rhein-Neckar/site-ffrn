@@ -14,7 +14,7 @@ runs:
       shell: bash
     - run: tar -cJf "$GITHUB_WORKSPACE/build-artifact-workdir/output.tar.xz" -C ${{ inputs.gluon-path }}/output images packages debug
       shell: bash
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: ${{ inputs.hardware-target }}
         path: build-artifact-workdir
