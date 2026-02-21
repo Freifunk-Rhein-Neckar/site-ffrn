@@ -18,7 +18,7 @@ on:
         description: "Skip pull request creation"
         type: boolean
         required: true
-        default: true
+        default: false
 
 jobs:
   update-gluon:
