@@ -112,13 +112,16 @@ jobs:
         run: timedatectl status
 
       - name: Get Targets
-        uses: freifunk-gluon/action-target-list@v1
+        uses: Freifunk-Rhein-Neckar/gluon-action-target-list@v2
         id: get-targets
         with:
+          container-image: ${{ needs.build-meta.outputs.container-image }}
+          container-version: ${{ needs.build-meta.outputs.container-version }}
           gluon-path: "gluon-gha-data/gluon"
-          broken: ${{ needs.build-meta.outputs.broken }}
+          site-path: "."
           allowlist: ${{ needs.build-meta.outputs.target-whitelist }}
-
+          broken: ${{ needs.build-meta.outputs.broken }}
+          deprecated: "upgrade"
 
   host-tools:
     needs: build-meta
