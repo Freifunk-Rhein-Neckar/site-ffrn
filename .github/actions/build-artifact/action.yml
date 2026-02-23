@@ -1,3 +1,5 @@
+---
+# yamllint disable rule:line-length
 name: "Create Artifact for single-target Gluon-build"
 description: "Create an artifact for a single Gluon-target which can be re-used with the build-combine action"
 inputs:
@@ -12,8 +14,26 @@ runs:
   steps:
     - run: mkdir -p "$GITHUB_WORKSPACE/build-artifact-workdir"
       shell: bash
-    - run: tar -cJf "$GITHUB_WORKSPACE/build-artifact-workdir/${{ inputs.hardware-target }}.tar.xz" -C ${{ inputs.gluon-path }}/output images packages debug
+    - name: List Output Files
+      run: ls -s1hAR ${{ inputs.gluon-path }}/output
       shell: bash
+    - name: Create output archive
+      shell: bash
+      run: |
+        OUTPUT_PATH="${{ inputs.gluon-path }}/output"
+        TAR_PATHS=()
+
+        [ -d "${OUTPUT_PATH}/images" ] && TAR_PATHS+=("images")
+        [ -d "${OUTPUT_PATH}/packages" ] && TAR_PATHS+=("packages")
+        [ -d "${OUTPUT_PATH}/debug" ] && TAR_PATHS+=("debug")
+
+        if [ ${#TAR_PATHS[@]} -eq 0 ]; then
+          echo "No directories found to archive."
+          exit 1
+        fi
+
+        tar -cJf "$GITHUB_WORKSPACE/build-artifact-workdir/${{ inputs.hardware-target }}.tar.xz" -C "${OUTPUT_PATH}" "${TAR_PATHS[@]}"
+
     - uses: actions/upload-artifact@v7
       with:
         path: build-artifact-workdir
@@ -21,3 +41,5 @@ runs:
         archive: false
     - run: rm -rf "$GITHUB_WORKSPACE/build-artifact-workdir"
       shell: bash
+
+# yamllint enable rule:line-length
