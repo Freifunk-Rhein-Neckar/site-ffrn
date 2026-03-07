@@ -211,6 +211,7 @@ jobs:
     permissions:
       id-token: write
       attestations: write
+      artifact-metadata: write
     steps:
       - uses: actions/checkout@v6
 
@@ -291,7 +292,7 @@ jobs:
 
       - name: Attest Image Build Provenance
         if: ${{ needs.build-meta.outputs.create-release != '0' }}
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest@v4
         with:
           subject-path: |
             "gluon-gha-data/gluon/output/images/sysupgrade/*"
@@ -599,6 +600,7 @@ jobs:
       contents: write
       id-token: write
       attestations: write
+      artifact-metadata: write
     steps:
       - uses: actions/checkout@v6
 
@@ -643,7 +645,7 @@ jobs:
           gluon-gha-data/release-notes.md
 
       - name: Attest Release Artifact Build Provenance
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest@v4
         with:
           subject-path: |
             gluon-gha-data/release-artifacts/*
