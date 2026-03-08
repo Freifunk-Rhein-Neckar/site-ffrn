@@ -68,6 +68,8 @@ jobs:
       WORKFLOW_DISPATCH_REPOSITORY: ${{ github.event.inputs.repository }}
       WORKFLOW_DISPATCH_REFERENCE: ${{ github.event.inputs.reference }}
       WORKFLOW_DISPATCH_TARGETS: ${{ github.event.inputs.targets }}
+      GHA_FFRN_BUILD_DEPLOY_ENABLED: ${{ vars.GHA_FFRN_BUILD_DEPLOY_ENABLED }}
+      GHA_FFRN_BUILD_SIGN_ENABLED: ${{ vars.GHA_FFRN_BUILD_SIGN_ENABLED }}
     runs-on: ubuntu-24.04
     name: Determine build-meta
     steps:
