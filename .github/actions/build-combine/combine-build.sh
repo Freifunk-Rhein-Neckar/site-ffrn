@@ -22,20 +22,22 @@ ARTIFACT_OUT_DIR="$RUNNER_TEMP/output"
 EXTRACT_TEMP_DIR="$RUNNER_TEMP/extract"
 
 mkdir -p "$ARTIFACT_OUT_DIR"
-for artifact_target in $ARTIFACT_NAMES ; do
+for artifact_target_archive in $ARTIFACT_NAMES ; do
+	# remove .tar.xz suffix to get target name
+	artifact_target=${artifact_target_archive%".tar.xz"}
 	# Check if artifact in list. Only delete otherwise.
 	if [ -n "$TARGET_LIST" ] && [[ "$TARGET_LIST" =~ "$artifact_target" ]]; then
 		echo "Combining ${artifact_target}"
 
 		EXTRACT_TEMP_DIR_TARGET="${EXTRACT_TEMP_DIR}/${artifact_target}"
-		ARTIFACT_SRC_DIR_TARGET="${ACTION_ARTIFACT_DIR}/${artifact_target}"
+		ARTIFACT_SRC_DIR_TARGET="${ACTION_ARTIFACT_DIR}/${artifact_target_archive}"
 
 		if [[ "$ACTION_KEEP_PACKED" != "1" ]]; then
 			# Create Temporary extraction directory
 			mkdir -p "${EXTRACT_TEMP_DIR_TARGET}"
 
 			# Unpack archive
-			tar xf "${ARTIFACT_SRC_DIR_TARGET}/output.tar.xz" -C "${EXTRACT_TEMP_DIR_TARGET}"
+			tar xf "${ARTIFACT_SRC_DIR_TARGET}/${artifact_target_archive}" -C "${EXTRACT_TEMP_DIR_TARGET}"
 
 			# Combine targets
 			rsync -a ${EXTRACT_TEMP_DIR_TARGET}/* "$ARTIFACT_OUT_DIR"
@@ -44,7 +46,7 @@ for artifact_target in $ARTIFACT_NAMES ; do
 			rm -rf "${EXTRACT_TEMP_DIR_TARGET}"
 		else
 			# Copy and rename archive
-			cp "${ARTIFACT_SRC_DIR_TARGET}/output.tar.xz" "${ARTIFACT_OUT_DIR}/${artifact_target}.tar.xz"
+			cp "${ARTIFACT_SRC_DIR_TARGET}/${artifact_target_archive}" "${ARTIFACT_OUT_DIR}/${artifact_target}.tar.xz"
 		fi
 
 		# Delete artifacts if enabled

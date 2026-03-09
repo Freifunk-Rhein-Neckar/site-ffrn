@@ -68,6 +68,8 @@ jobs:
       WORKFLOW_DISPATCH_REPOSITORY: ${{ github.event.inputs.repository }}
       WORKFLOW_DISPATCH_REFERENCE: ${{ github.event.inputs.reference }}
       WORKFLOW_DISPATCH_TARGETS: ${{ github.event.inputs.targets }}
+      GHA_FFRN_BUILD_DEPLOY_ENABLED: ${{ vars.GHA_FFRN_BUILD_DEPLOY_ENABLED }}
+      GHA_FFRN_BUILD_SIGN_ENABLED: ${{ vars.GHA_FFRN_BUILD_SIGN_ENABLED }}
     runs-on: ubuntu-24.04
     name: Determine build-meta
     steps:
@@ -84,10 +86,10 @@ jobs:
         run: bash .github/build-meta.sh
 
       - name: Create Artifact of build-meta
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: build-meta
           path: ${{ steps.build-metadata.outputs.build-meta-output }}
+          archive: false
 
 
   targets:
@@ -186,20 +188,17 @@ jobs:
           path: gluon-gha-data/gluon/openwrt
           key: openwrt-${{ steps.cache-key.outputs.cache-key }}
 
-      - name: Create Artifact output directory
-        run: mkdir gluon-gha-data/openwrt
-
       - name: Pack Output
         run: >
-          tar cJf "gluon-gha-data/openwrt/openwrt.tar.xz"
+          tar cJf "gluon-gha-data/openwrt.tar.xz"
           --posix -C "gluon-gha-data/gluon" openwrt
 
       - name: Archive build output
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: openwrt
-          path: "gluon-gha-data/openwrt"
+          path: "gluon-gha-data/openwrt.tar.xz"
           compression-level: 0
+          archive: false
 
 
   build:
@@ -214,6 +213,7 @@ jobs:
     permissions:
       id-token: write
       attestations: write
+      artifact-metadata: write
     steps:
       - uses: actions/checkout@v6
 
@@ -249,14 +249,14 @@ jobs:
         run: bash .github/free-runner-space.sh
 
       - name: Download prepared OpenWrt
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
-          name: openwrt
-          path: "gluon-gha-data/openwrt"
+          name: openwrt.tar.xz
+          path: "gluon-gha-data/"
 
       - name: Restore OpenWrt
         run: >
-          tar xf gluon-gha-data/openwrt/openwrt.tar.xz -C gluon-gha-data/gluon
+          tar xf gluon-gha-data/openwrt.tar.xz -C gluon-gha-data/gluon
 
       - name: Gluon Update
         uses: Freifunk-Rhein-Neckar/gluon-action-build@v2
@@ -294,7 +294,7 @@ jobs:
 
       - name: Attest Image Build Provenance
         if: ${{ needs.build-meta.outputs.create-release != '0' }}
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest@v4
         with:
           subject-path: |
             "gluon-gha-data/gluon/output/images/sysupgrade/*"
@@ -331,7 +331,7 @@ jobs:
       - name: Show current Timezone settings
         run: timedatectl status
 
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           path: "gluon-gha-data/gluon-output"
 
@@ -343,14 +343,14 @@ jobs:
           path: 'gluon-gha-data/gluon'
 
       - name: Download prepared OpenWrt
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
-          name: openwrt
-          path: "gluon-gha-data/openwrt"
+          name: openwrt.tar.xz
+          path: "gluon-gha-data/"
 
       - name: Restore OpenWrt
         run: |
-          tar xf gluon-gha-data/openwrt/openwrt.tar.xz -C gluon-gha-data/gluon
+          tar xf gluon-gha-data/openwrt.tar.xz -C gluon-gha-data/gluon
 
       - name: Combine Build output
         uses: ./.github/actions/build-combine
@@ -492,10 +492,10 @@ jobs:
           -C gluon-gha-data/gluon/output/images/sysupgrade -T -
 
       - name: Archive output
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: manifest-signed
           path: gluon-gha-data/artifact-out
+          archive: false
 
 
   deploy:
@@ -514,7 +514,7 @@ jobs:
       - name: Show current Timezone settings
         run: timedatectl status
 
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           path: "gluon-gha-data/artifact-download"
 
@@ -531,7 +531,7 @@ jobs:
       - name: Extract Manifest
         run: >
           tar xf
-          gluon-gha-data/artifact-download/manifest-signed/manifest.tar.xz
+          gluon-gha-data/artifact-download/manifest.tar.xz/manifest.tar.xz
           -C gluon-gha-data/gluon-output/output/images/sysupgrade
 
       - name: Save SSH Key for deployment
@@ -602,6 +602,7 @@ jobs:
       contents: write
       id-token: write
       attestations: write
+      artifact-metadata: write
     steps:
       - uses: actions/checkout@v6
 
@@ -611,7 +612,7 @@ jobs:
       - name: Show current Timezone settings
         run: timedatectl status
 
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           path: "gluon-gha-data/artifact-download"
 
@@ -628,12 +629,12 @@ jobs:
 
       - name: Move manifest archive
         run: >-
-          mv gluon-gha-data/artifact-download/manifest-signed/manifest.tar.xz
+          mv gluon-gha-data/artifact-download/manifest.tar.xz/manifest.tar.xz
           gluon-gha-data/release-artifacts/manifest.tar.xz
 
-      - name: Move manifest archive
+      - name: Move build-meta
         run: >-
-          mv gluon-gha-data/artifact-download/build-meta/build-meta.txt
+          mv gluon-gha-data/artifact-download/build-meta.txt/build-meta.txt
           gluon-gha-data/release-artifacts/build-meta.txt
 
       - name: Show File sizes
@@ -646,7 +647,7 @@ jobs:
           gluon-gha-data/release-notes.md
 
       - name: Attest Release Artifact Build Provenance
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest@v4
         with:
           subject-path: |
             gluon-gha-data/release-artifacts/*
