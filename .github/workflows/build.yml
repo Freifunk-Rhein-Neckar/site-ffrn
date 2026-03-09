@@ -278,7 +278,7 @@ jobs:
           gluon-path: "gluon-gha-data/gluon"
           hardware-target: ${{ matrix.target }}
           broken: ${{ needs.build-meta.outputs.broken }}
-          deprecated: "0"
+          deprecated: "upgrade"
           autoupdater-enabled: |
             ${{ needs.build-meta.outputs.autoupdater-enabled }}
           autoupdater-branch: |
