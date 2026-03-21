@@ -90,7 +90,7 @@ jobs:
           branch: bump-gluon-${{ github.event.inputs.site-branch }}-${{ steps.head-hash.outputs.short-hash }}
           create_branch: true
 
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         if: steps.head-hash.outputs.hash != steps.build-info-hash.outputs.hash && github.event.inputs.skip-pull-request == 'false' && vars.GH_APP_ID != ''
         id: app-token
         with:

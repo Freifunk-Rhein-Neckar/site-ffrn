@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         if: vars.GH_APP_ID != ''
         id: app-token
         with:
