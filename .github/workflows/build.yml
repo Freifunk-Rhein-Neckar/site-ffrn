@@ -5,6 +5,11 @@ name: "Build Gluon images"
 on:
   pull_request:
   push:
+    branches-ignore:
+      - 'dependabot/**'
+      - 'bump-gluon-*'
+      - 'backport-[0-9]+-to-*'
+      - 'pr-**'
   workflow_dispatch:
     inputs:
       repository:
