@@ -10,6 +10,8 @@ on:
       - 'bump-gluon-*'
       - 'backport-[0-9]+-to-*'
       - 'pr-**'
+    tags:
+      - '**'
   workflow_dispatch:
     inputs:
       repository:
