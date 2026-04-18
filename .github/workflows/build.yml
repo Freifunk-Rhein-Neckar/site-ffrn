@@ -660,7 +660,7 @@ jobs:
             gluon-gha-data/release-artifacts/*
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name: ${{ needs.build-meta.outputs.release-version }}
           # yamllint disable rule:line-length
