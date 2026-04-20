@@ -26,7 +26,7 @@ jobs:
         if: vars.GH_APP_ID != ''
         id: app-token
         with:
-          app-id: ${{ vars.GH_APP_ID }}
+          client-id: ${{ vars.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
       - name: Create backport PRs
         uses: korthout/backport-action@v4.3.0
