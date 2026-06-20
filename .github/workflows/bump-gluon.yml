@@ -32,7 +32,7 @@ jobs:
       COMMIT_EMAIL: info@freifunk-rhein-neckar.de
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.inputs.site-branch }}
 
