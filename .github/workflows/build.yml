@@ -158,7 +158,7 @@ jobs:
 
       - name: Restore Cache
         id: restore-cache-tools
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: gluon-gha-data/gluon/openwrt
           key: openwrt-${{ steps.cache-key.outputs.cache-key }}
@@ -190,7 +190,7 @@ jobs:
         if: >
           github.ref_type != 'tag' &&
           steps.restore-cache-tools.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: gluon-gha-data/gluon/openwrt
           key: openwrt-${{ steps.cache-key.outputs.cache-key }}
