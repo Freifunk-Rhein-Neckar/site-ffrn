@@ -13,6 +13,8 @@ SIGKEYS["Tom/herbetom"]="3a00002ecf1392e7ddbb8db395412cdcb5d9cd8e310b486c3ec1fc0
 SIGKEYS["Kai/wusel42"]="cd2ed332a77bb71ade862d5b8521c59c7987ef418da6ecc69c19f32aa5ec5e66"
 SIGKEYS["Jan/Jevermeister"]="6fbba7d2e081a0a2c3d6832d5440e8786f90acabfe462b602531b4665ce58590"
 SIGKEYS["Michel/eriu"]="be5155bac7681fb4631bdab72c47b6e606e3f0ccfe50bb8f6cd6866c1c97c729"
+SIGKEYS["Jakob/sur5r"]="0a84db7f3f253dc52848fc4dc54ddec43f8d6c339c115e968d64cc55ac1c4b42"
+SIGKEYS["Georg/hax404"]="85bb4dfb42ad5607b88d3b9c9c3d236e547460d35e00bae6e4114d73a4da6147"
 SIGKEYS["github-actions-ci"]="ff49b7abc9d2caab57bc5c88fb8cc3b5c5b0eb5312b7cc326a18cc811305592a"
 SIGKEYS["buildserver"]="e191158c837941158d827e5c6df971bfb01161d5d6f86a366d8a7897feedf9da"
 
