@@ -4,6 +4,7 @@ name: "Build Gluon images"
 # yamllint disable-line rule:truthy
 on:
   pull_request:
+  merge_group:
   push:
     branches-ignore:
       - 'dependabot/**'
