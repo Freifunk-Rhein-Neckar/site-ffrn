@@ -21,7 +21,6 @@ features({
 packages({
 	'iwinfo',
 	'respondd-module-airtime',
-	'ffda-node-whisperer',
 })
 
 -- Enable SQM only on targets which have the CPU capabilities
