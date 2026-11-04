@@ -86,6 +86,7 @@ local pkgs_usb_net = {
 	'kmod-usb-net-asix-ax88179',
 	'kmod-usb-net-cdc-eem',
 	'kmod-usb-net-cdc-ether',
+	'kmod-usb-net-cdc-ncm',
 	'kmod-usb-net-cdc-subset',
 	'kmod-usb-net-dm9601-ether',
 	'kmod-usb-net-hso',
