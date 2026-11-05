@@ -37,10 +37,6 @@ end
 
 -- Packages and features for devices which are not flagged as tiny
 if not device_class('tiny') then
-	packages({
-		'ffda-gluon-usteer'
-	})
-
 	features({
 		'tls',
 		'web-cellular',
@@ -90,6 +86,7 @@ local pkgs_usb_net = {
 	'kmod-usb-net-asix-ax88179',
 	'kmod-usb-net-cdc-eem',
 	'kmod-usb-net-cdc-ether',
+	'kmod-usb-net-cdc-ncm',
 	'kmod-usb-net-cdc-subset',
 	'kmod-usb-net-dm9601-ether',
 	'kmod-usb-net-hso',
@@ -203,10 +200,4 @@ if target('x86') then
 	packages(pkgs_usb_net)
 	packages(pkgs_usb_serial)
 	packages(pkgs_usb_storage)
-end
-
--- the Network-activated setup-mode allows us to unbreak the device
-if device({'zyxel-nwa55axe'}) then
-	broken(false)
-	packages({'ffda-network-setup-mode'})
 end
